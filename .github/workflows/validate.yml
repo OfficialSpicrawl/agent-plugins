@@ -1,0 +1,40 @@
+# Cheap repo-wide checks: every JSON file parses, the OpenCode plugin's tests
+# pass, and no file contains a real-looking Spicrawl API key.
+
+name: validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: JSON files parse
+        run: |
+          status=0
+          while IFS= read -r -d '' f; do
+            if ! node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' "$f" 2>/dev/null; then
+              echo "::error file=$f::invalid JSON"
+              status=1
+            fi
+          done < <(find . -name '*.json' -not -path './.git/*' -not -path '*/node_modules/*' -print0)
+          exit $status
+      - name: opencode tests
+        working-directory: opencode
+        run: node --test
+      - name: no real-looking API keys
+        run: |
+          if git grep -nIE 'spicrawl_(live|test)_[a-z0-9]{20,}' -- . ; then
+            echo "::error::a file contains something that looks like a real Spicrawl API key"
+            exit 1
+          fi

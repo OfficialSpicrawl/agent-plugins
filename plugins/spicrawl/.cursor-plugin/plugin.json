@@ -13,5 +13,16 @@
   "logo": "logo.png",
   "keywords": ["scraping", "web", "markdown", "batch", "sessions", "mcp"],
   "skills": "skills",
-  "mcpServers": "./mcp/cursor.json"
+  "mcpServers": "./mcp/cursor.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "SPICRAWL_API_KEY": {
+        "type": "string",
+        "title": "Spicrawl API key",
+        "description": "Your Spicrawl API key from https://app.spicrawl.com (spicrawl_live_... or spicrawl_test_...)."
+      }
+    },
+    "required": ["SPICRAWL_API_KEY"]
+  }
 }
