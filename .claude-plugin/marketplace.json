@@ -1,0 +1,18 @@
+{
+  "name": "spicrawl-plugins",
+  "description": "Spicrawl's plugin for coding agents: scrape web pages, run batch jobs, keep login sessions.",
+  "owner": {
+    "name": "Spicrawl",
+    "email": "dev@spicrawl.com"
+  },
+  "plugins": [
+    {
+      "name": "spicrawl",
+      "source": "./plugins/spicrawl",
+      "description": "Scrape web pages to Markdown, HTML, text or JSON, run batch jobs, keep login sessions, and read request history and usage, through the hosted Spicrawl MCP server.",
+      "homepage": "https://docs.spicrawl.com/agents/mcp",
+      "license": "Apache-2.0",
+      "keywords": ["scraping", "web", "markdown", "batch", "sessions", "mcp"]
+    }
+  ]
+}

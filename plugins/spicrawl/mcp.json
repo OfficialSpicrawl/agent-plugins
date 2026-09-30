@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "spicrawl": {
+      "type": "http",
+      "url": "https://mcp.spicrawl.com/mcp",
+      "headers": {
+        "Authorization": "${SPICRAWL_AUTH}"
+      },
+      "oauth": false
+    }
+  }
+}

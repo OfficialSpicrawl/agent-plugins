@@ -1,0 +1,22 @@
+{
+  "name": "spicrawl",
+  "version": "0.1.0",
+  "description": "Scrape web pages to Markdown, HTML, text or JSON, run batch jobs, keep login sessions, and read request history and usage, through the hosted Spicrawl MCP server.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "spicrawl": {
+      "httpUrl": "https://mcp.spicrawl.com/mcp",
+      "headers": {
+        "Authorization": "$SPICRAWL_MCP_BEARER"
+      }
+    }
+  },
+  "settings": [
+    {
+      "name": "Spicrawl authorization header",
+      "description": "The word Bearer, a space, then your Spicrawl API key from https://app.spicrawl.com (Bearer spicrawl_live_...).",
+      "envVar": "SPICRAWL_MCP_BEARER",
+      "sensitive": true
+    }
+  ]
+}

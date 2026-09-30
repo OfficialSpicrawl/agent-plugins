@@ -1,0 +1,20 @@
+{
+  "name": "spicrawl-plugins",
+  "interface": {
+    "displayName": "Spicrawl"
+  },
+  "plugins": [
+    {
+      "name": "spicrawl",
+      "source": {
+        "source": "local",
+        "path": "./plugins/spicrawl"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

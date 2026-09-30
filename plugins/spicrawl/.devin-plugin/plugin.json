@@ -1,0 +1,19 @@
+{
+  "name": "spicrawl",
+  "displayName": "Spicrawl",
+  "description": "Scrape web pages to Markdown or JSON, with batch jobs and persistent login sessions.",
+  "homepage": "https://spicrawl.com",
+  "logo": "logo.png",
+  "keywords": [
+    "AI & Machine Learning",
+    "Development Tools"
+  ],
+  "mcpServers": {
+    "spicrawl": {
+      "url": "https://mcp.spicrawl.com/mcp",
+      "headers": {
+        "Authorization": "${SPICRAWL_AUTHORIZATION}"
+      }
+    }
+  }
+}

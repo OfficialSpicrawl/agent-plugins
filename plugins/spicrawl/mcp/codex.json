@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "spicrawl": {
+      "url": "https://mcp.spicrawl.com/mcp",
+      "bearer_token_env_var": "SPICRAWL_API_KEY"
+    }
+  }
+}
