@@ -8,7 +8,7 @@
       "name": "spicrawl",
       "source": {
         "source": "local",
-        "path": "./plugins/spicrawl"
+        "path": "./plugins/spicrawl-openai"
       },
       "policy": {
         "installation": "AVAILABLE",

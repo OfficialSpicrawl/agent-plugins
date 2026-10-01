@@ -1,0 +1,43 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "spicrawl",
+  "version": "0.1.0",
+  "description": "Fetch public web pages you name and return them as Markdown, HTML, text or JSON. Render JavaScript pages, extract fields with CSS selectors, and run batch jobs over lists of URLs. Requires an existing Spicrawl account.",
+  "author": {
+    "name": "Spicrawl",
+    "email": "dev@spicrawl.com",
+    "url": "https://spicrawl.com"
+  },
+  "homepage": "https://docs.spicrawl.com/agents/mcp",
+  "repository": "https://github.com/Spicrawl/agent-plugins",
+  "license": "Apache-2.0",
+  "keywords": ["scraping", "web", "markdown", "batch"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Spicrawl",
+        "shortDescription": "Fetch web pages as Markdown",
+        "longDescription": "Fetch public web pages you name and return them as Markdown, HTML, text or JSON. Render JavaScript pages, extract fields with CSS selectors, and run batch jobs over lists of URLs. It cannot sign in to sites, solve CAPTCHAs or get around access controls; if a site refuses, it reports that. Requires an existing Spicrawl account.",
+        "developerName": "Spicrawl",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Fetch web pages",
+          "Extract fields with CSS selectors",
+          "Run batch jobs"
+        ],
+        "websiteURL": "https://spicrawl.com",
+        "supportURL": "https://todo.invalid/TODO-support-page",
+        "privacyPolicyURL": "https://todo.invalid/TODO-privacy-policy",
+        "termsOfServiceURL": "https://todo.invalid/TODO-terms-of-service",
+        "defaultPrompt": [
+          "Fetch https://example.com/docs/start as Markdown and summarize it.",
+          "Get the headline and author from https://example.com/news/launch.",
+          "Render https://example.com/app and return its main text."
+        ],
+        "brandColor": "#101112",
+        "composerIcon": "./assets/logo.png",
+        "logo": "./assets/logo.png"
+      }
+    }
+  }
+}

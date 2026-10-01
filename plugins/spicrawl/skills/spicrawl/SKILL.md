@@ -157,7 +157,7 @@ Unknown fields are rejected with `400`: send only the fields below.
 | `actions` | object[] | Browser workflow, at most 50 steps: `click`, `fill`, `wait_for`, `scroll`, `select`, `evaluate`, `screenshot`. |
 | `block_resources` | string[] | `images` `fonts` `media` `stylesheets` `scripts`, or `none`. |
 | `session_id` | string | Reuse a session's cookies and storage (see Sessions). Combine with `js_render` when you also send `actions` or `wait_for`. |
-| `cache` / `cache_ttl` | bool / int s | Cache is **on** (48h max). Send `cache: false` for prices, stock or anything time-sensitive. |
+| `cache` / `cache_ttl` | bool / int s | Cache is **on** (48h max). Send `cache: false` for prices, stock or anything time-sensitive. A cache hit is billed at the same price as the fetch that stored it, so this changes freshness, not cost. |
 | `max_cost` | int | Refuse up front if the request would cost more credits than this. |
 | `proxy` / `proxy_verify` | string / bool | Your own proxy URL (+0 credits), optionally checked first. Use it when a site blocks our IPs or you need a specific country. |
 | `custom_headers` / `method` | object / string | Headers sent to the target (the field is `custom_headers`; `headers` is rejected). Default method `GET`. |
@@ -218,12 +218,12 @@ Every step accepts `label`, `timeout_ms` and `on_error` (`fail` or `skip`). `sec
 |---|---|
 | `X-Request-Id` | ULID of the call. Log it; look it up with `GET /v1/requests/{id}`. |
 | `X-Target-Status` | The site's HTTP status. |
-| `X-Credits-Charged` | Credits actually billed (`0` on any failure). |
+| `X-Credits-Charged` | Credits actually billed (`0` on any failure; on a cache hit, the price of the fetch that stored it). |
 | `X-Request-Cost` | What it would have cost. |
 | `X-Credits-Remaining` | Monthly allowance left after this call (absent if the org has no limit). |
 | `X-Engine` | Engine that served it. |
 | `X-Final-Url` | URL after redirects. |
-| `Cache-State` | `hit` (0 credits), `miss` or `bypass`. |
+| `Cache-State` | `hit` (billed at the price of the fetch that stored it), `miss` or `bypass`. |
 | `X-Warning` | Non-fatal decisions (a clamped `cache_ttl`, an ignored flag). |
 | `X-RateLimit-Limit` / `-Remaining` / `-Reset` | Rate limit state. |
 
@@ -298,8 +298,9 @@ Do not plan around it. For clicks, typing and scrolling on a page, use `actions`
 | `chromium` | 8 |
 
 You pay for the engine that actually served (`X-Engine`). **Failures cost
-0.** Cache hits cost 0. A deployment may discount these prices: `X-Credits-Charged` and
-`X-Request-Cost` are authoritative.
+0.** A cache hit is billed at the same price as the fetch that stored it. The cache saves the
+fetch (latency and load on the target), not credits. A deployment may discount these prices:
+`X-Credits-Charged` and `X-Request-Cost` are authoritative.
 
 Each organization gets a monthly allowance (1,000 credits by default). The month starts on the
 day the organization was created and resets at 00:00 UTC on that day. What is left, and when it

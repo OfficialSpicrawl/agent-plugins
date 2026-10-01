@@ -23,7 +23,8 @@ Use them to:
   retry only when `retryable` is true, and back off.
 - A failed request costs 0 credits, but a retried successful request is billed again. Set
   `max_cost` to cap spend. Results are cached by default; send `cache: false` for prices, stock or
-  anything else that changes quickly.
+  anything else that changes quickly. A cache hit is billed at the same price as the fetch that
+  stored it, so the cache saves time, not credits.
 - Use a batch job instead of a loop for more than about 20 URLs.
 - Do not use `spicrawl_browser_connect_url` or any option the tool schema does not list.
 - Coming soon, not available yet: AI extraction, stealth mode, Spicrawl's managed proxy pool and the remote browser. Do not plan around them.
