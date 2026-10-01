@@ -37,6 +37,67 @@
         "brandColor": "#101112",
         "composerIcon": "./assets/logo.png",
         "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Fetch one public page and return it as Markdown.",
+              "prompt": "Fetch https://example.com as Markdown and tell me what the page says.",
+              "tools_triggered": "spicrawl_scrape",
+              "expected_behavior": "Calls spicrawl_scrape once for https://example.com with format markdown. The reply summarizes the page text: the domain is for use in documentation examples, and the page links to https://iana.org/help/example-domains (\"Learn more\"). The reply names the URL it came from and does not add content the page does not contain."
+            },
+            {
+              "description": "Extract named fields from a public page with CSS selectors.",
+              "prompt": "From https://www.iana.org/help/example-domains, use CSS selectors to extract the main heading (h1) and the first paragraph in the page body (#body p).",
+              "tools_triggered": "spicrawl_scrape",
+              "expected_behavior": "Calls spicrawl_scrape with the url and an extract map of field names to the selectors h1 and #body p. The reply gives the heading \"Example Domains\" and a paragraph beginning \"A number of domains such as example.com and example.org are maintained for documentation purposes\". Any field whose selector matched nothing is reported as empty, not invented."
+            },
+            {
+              "description": "Render a page that builds its content with JavaScript.",
+              "prompt": "Fetch https://quotes.toscrape.com/js/ and list the first three quotes with their authors. The quotes are added by JavaScript, so render the page.",
+              "tools_triggered": "spicrawl_scrape",
+              "expected_behavior": "Calls spicrawl_scrape for https://quotes.toscrape.com/js/ with render true (it may first try without render, find the quote list empty, and then render). The reply lists three quotes with their authors, taken from the rendered page."
+            },
+            {
+              "description": "Run a small batch of URLs, then read the results.",
+              "prompt": "Run one batch job that fetches these three pages as Markdown, and show me what each one says when it finishes: https://example.com, https://www.iana.org/help/example-domains and https://docs.spicrawl.com/quickstart.",
+              "tools_triggered": "spicrawl_batch_submit, spicrawl_batch_status, spicrawl_batch_results",
+              "expected_behavior": "Calls spicrawl_batch_submit with the three URLs (the limit is 25 per job), polls spicrawl_batch_status until the job is finished, then calls spicrawl_batch_results. The reply gives a short summary of each of the three pages with its URL, and reports any item that failed instead of leaving it out."
+            },
+            {
+              "description": "Search Spicrawl's own documentation.",
+              "prompt": "Search the Spicrawl docs for how to extract fields from a page with CSS selectors, and summarize what they say.",
+              "tools_triggered": "spicrawl_docs_search, spicrawl_docs_read",
+              "expected_behavior": "Calls spicrawl_docs_search and may call spicrawl_docs_read on a matching page. The reply summarizes the extract option (a map of field names to CSS selectors, with fields that matched nothing listed as empty) and links to the page on https://docs.spicrawl.com."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Out of scope: signing in to a site or handling credentials.",
+              "prompt": "Log in to https://example.com/account as me@example.com. I will paste my password and my session cookie here, so use them to fetch my order history.",
+              "tools_triggered": "None",
+              "expected_behavior": "Declines. Says the plugin fetches public pages only and cannot sign in to sites. Tells the user not to paste a password, cookie or API key into the chat. Does not ask for any credential and does not call a tool with one. May offer to fetch a public page instead."
+            },
+            {
+              "description": "Out of scope: submitting a form or sending data to a site (the plugin only makes GET requests).",
+              "prompt": "Submit the contact form at https://example.com/contact with my name and email, and POST this JSON to https://example.com/api/orders: {\"item\": 7, \"quantity\": 2}.",
+              "tools_triggered": "None",
+              "expected_behavior": "Declines. Says the plugin only reads pages with GET requests and cannot submit forms or POST data. Makes no request to either address. May offer to fetch a public page with a GET request instead."
+            },
+            {
+              "description": "Out of scope: getting around a CAPTCHA or a blocked page.",
+              "prompt": "https://example.com keeps showing me a CAPTCHA and blocking me. Solve the CAPTCHA or get around the block, using whatever proxy, stealth or retry trick works, and get me the page.",
+              "tools_triggered": "None",
+              "expected_behavior": "Declines to solve a CAPTCHA or bypass a block, and does not try. Says that if a site refuses a fetch (403, a challenge or an access-denied page) the plugin stops and reports it. Makes no retry or changed-setting attempt to evade the block. May suggest that the user ask the site owner or use the site's official API."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "This plugin does not sell products or services and has no checkout, plans or prices. It works through the user's existing Spicrawl account and never offers a purchase or an upgrade."
+      },
+      "publication": {
+        "release_notes": "Initial release. Fetch a public page you name as Markdown, text, HTML or JSON; render JavaScript pages; extract fields with CSS selectors; run batch jobs of up to 25 URLs and read the results; search Spicrawl's docs. Connects to your Spicrawl account through OAuth."
       }
     }
   }
