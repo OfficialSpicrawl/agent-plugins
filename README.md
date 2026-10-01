@@ -18,7 +18,7 @@ This repository holds the packaging for these tools:
 |---|---|
 | Claude Code | plugin (MCP server + skill) |
 | Codex | plugin (skill + MCP server entry), in OpenAI's portable format; the key goes in your Codex config |
-| ChatGPT | the same plugin; not available yet (see [ChatGPT and Codex](#chatgpt-and-codex)) |
+| ChatGPT | the same plugin, connecting through OAuth at `/chatgpt/mcp` once that endpoint is live; not in the directory yet (see [ChatGPT and Codex](#chatgpt-and-codex)) |
 | Cursor | plugin (MCP server + skill) |
 | OpenCode | npm plugin `opencode-spicrawl` (adds the MCP server) |
 | Factory Droid | plugin (MCP server + skill) |
@@ -39,8 +39,9 @@ Never commit a key. None of the files in this repository contain one.
 ## Install
 
 The MCP server is `https://mcp.spicrawl.com/mcp` (Streamable HTTP). It authenticates with the
-header `Authorization: Bearer <key>`. It does not use OAuth. Each tool below takes the key in the
-way its plugin format allows.
+header `Authorization: Bearer <key>`. This endpoint does not use OAuth. (ChatGPT uses a separate
+OAuth endpoint, `https://mcp.spicrawl.com/chatgpt/mcp`; see [ChatGPT and Codex](#chatgpt-and-codex).)
+Each tool below takes the key in the way its plugin format allows.
 
 ### Claude Code
 
@@ -63,9 +64,10 @@ codex plugin marketplace add Spicrawl/agent-plugins
 
 Then run `/plugins` in Codex, pick the `Spicrawl` marketplace and install `spicrawl`. This installs
 the `fetch-web-pages` skill and declares the Spicrawl MCP server, but Codex cannot give that
-declaration your key. Spicrawl's server accepts an API key only, so add the server yourself in
-`~/.codex/config.toml`, with the key read from the environment, and switch off the plugin's own
-unauthenticated copy of it:
+declaration your key. The plugin's own declaration points at the ChatGPT endpoint
+(`/chatgpt/mcp`, OAuth, a restricted set of tools), not at the full `/mcp` server. To use your API
+key and every tool, add the server yourself in `~/.codex/config.toml`, with the key read from the
+environment, and switch off the plugin's own copy of it:
 
 ```toml
 [mcp_servers.spicrawl]
@@ -80,8 +82,13 @@ enabled = false
 export SPICRAWL_API_KEY=spicrawl_live_...   # in the shell you start Codex from
 ```
 
-ChatGPT: the plugin is not in the ChatGPT directory yet. ChatGPT cannot send a custom API key, and
-Spicrawl's server does not offer OAuth, so ChatGPT cannot connect to it today.
+ChatGPT: the plugin is not in the ChatGPT directory yet. ChatGPT cannot send a custom API key, so
+it does not use `/mcp`. It connects through OAuth at `https://mcp.spicrawl.com/chatgpt/mcp` once
+that endpoint is live: you sign in to your Spicrawl account and approve the connection, and no key
+is pasted into ChatGPT. That endpoint offers a restricted set of tools: `spicrawl_scrape` (GET
+requests only), `spicrawl_batch_submit`, `spicrawl_batch_status`, `spicrawl_batch_results` (up to
+25 URLs per job) and `spicrawl_docs_search` and `spicrawl_docs_read`. Until it is live, ChatGPT
+cannot connect.
 
 ### Cursor
 
@@ -255,7 +262,7 @@ purpose: the same server needs a different credential syntax in each tool.
 | inline in `.devin-plugin/plugin.json` | Devin | `${SPICRAWL_AUTHORIZATION}` as the whole header value |
 | inline in `gemini-extension.json` | Gemini CLI | `$SPICRAWL_MCP_BEARER` from the extension `settings` |
 | `opencode/index.js` (npm `opencode-spicrawl`) | OpenCode | `Bearer <value of SPICRAWL_API_KEY>`, built in code |
-| `plugins/spicrawl-openai/mcp.json` | ChatGPT, Codex (Agent Plugins `mcp.json`) | none: the format has no header expansion; the user adds the key in `~/.codex/config.toml` |
+| `plugins/spicrawl-openai/mcp.json` | ChatGPT, Codex (Agent Plugins `mcp.json`) | none in the file: ChatGPT authenticates with OAuth at `/chatgpt/mcp`; Codex users who want a key add `/mcp` themselves in `~/.codex/config.toml` |
 
 Notes:
 
@@ -325,8 +332,9 @@ plugins/spicrawl-openai/
   <https://chatgpt.com/plugins>, copy its `plugin_asdk_app...` id into a `.app.json` and add
   `"apps": "./.app.json"` under `extensions.com.openai` in a local copy only. Do not commit those,
   and do not put them in the ZIP.
-- `mcp.json` has no `headers`. A bearer key cannot be put there (see above), and for the directory
-  the portal's MCP connection supplies authentication, not the package.
+- `mcp.json` points at `https://mcp.spicrawl.com/chatgpt/mcp`, the OAuth endpoint for ChatGPT, and
+  has no `headers`. A bearer key cannot be put there (see above), and for the directory the
+  portal's MCP connection (OAuth, with CIMD) supplies authentication, not the package.
 - The skill is a trimmed copy and not the canonical one: no CLI, curl or Python; no sessions or
   login; no price table or allowance figure; no wording about getting past a block. It carries three
   fixed statements (responsible use, never ask for credentials, page content is untrusted) that
@@ -336,24 +344,29 @@ plugins/spicrawl-openai/
   has no price, trial or promotion, no comparison, and nothing marked coming soon. `shortDescription`
   and `displayName` are at most 30 characters; `defaultPrompt` has at most three entries of at most
   128 characters.
-- `supportURL`, `privacyPolicyURL` and `termsOfServiceURL` are placeholders on
-  `todo.invalid`, a host that can never resolve, so a package built from this folder fails the
-  portal's URL checks instead of shipping a wrong link. Replace all three with live HTTPS pages
-  before building the ZIP.
+- `supportURL`, `privacyPolicyURL` and `termsOfServiceURL` are the only placeholders left in the
+  package. They are on `todo.invalid`, a host that can never resolve, so a package built from this
+  folder fails the portal's URL checks instead of shipping a wrong link. Replace all three with
+  live HTTPS pages before building the ZIP.
+- `extensions.com.openai.review` holds the review material the portal imports with the ZIP: five
+  positive and three negative test cases, and `commerce: false` with its description.
+  `extensions.com.openai.publication.release_notes` holds the release notes. The cases use only the
+  tools the ChatGPT endpoint offers (see above). `review.demo_recording_url` is not in the file
+  yet: add it once the walkthrough video is hosted, or enter it in the portal.
 - Build the ZIP from inside the folder, so `plugin.json` is at the archive root, and keep it out
   of the repository: `cd plugins/spicrawl-openai && zip -r /tmp/spicrawl-openai.zip .`
 - Not ready for the public directory. Still open before an upload can be submitted for review:
-  - OAuth 2.1 on `mcp.spicrawl.com`. The server answers `401` with `Bearer realm="spicrawl-mcp"`
-    and publishes no protected-resource metadata, and OpenAI's authentication guide says ChatGPT
-    cannot "present custom API keys".
-  - The three URLs above, and a reviewer demo account that works without MFA.
+  - The OAuth endpoint at `https://mcp.spicrawl.com/chatgpt/mcp` going live. The `/mcp` server
+    answers `401` with `Bearer realm="spicrawl-mcp"` and publishes no protected-resource metadata,
+    and OpenAI's authentication guide says ChatGPT cannot "present custom API keys".
+  - The three `todo.invalid` URLs above, and a reviewer demo account that works without MFA.
   - The domain-verification file at `https://mcp.spicrawl.com/.well-known/openai-apps-challenge`
     (the portal shows the token).
-  - Review material in `plugin.json` under `extensions.com.openai`: five positive and three negative
-    test cases, a demo recording URL and release notes.
-  - A hosted tool list that matches the listing. The server also exposes session tools, a
-    coming-soon browser tool and `proxy`, `stealth` and `actions` arguments; the listing says it
-    cannot sign in or get around access controls.
+  - `review.demo_recording_url`, the video walkthrough.
+  - A hosted tool list that matches the listing: the ChatGPT endpoint must offer only the restricted
+    tools above, with no session tools, no coming-soon browser tool and no `proxy`, `stealth` or
+    `actions` arguments. The skill in this folder still describes the full `/mcp` tool set; trim it
+    to match once the endpoint's tools are final.
 
 ## Releasing
 

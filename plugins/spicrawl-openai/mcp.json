@@ -3,7 +3,7 @@
   "mcpServers": {
     "spicrawl": {
       "type": "streamable-http",
-      "url": "https://mcp.spicrawl.com/mcp"
+      "url": "https://mcp.spicrawl.com/chatgpt/mcp"
     }
   }
 }
