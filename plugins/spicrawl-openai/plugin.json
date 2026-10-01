@@ -26,9 +26,9 @@
           "Run batch jobs"
         ],
         "websiteURL": "https://spicrawl.com",
-        "supportURL": "https://todo.invalid/TODO-support-page",
-        "privacyPolicyURL": "https://todo.invalid/TODO-privacy-policy",
-        "termsOfServiceURL": "https://todo.invalid/TODO-terms-of-service",
+        "supportURL": "https://spicrawl.com/support",
+        "privacyPolicyURL": "https://spicrawl.com/privacy",
+        "termsOfServiceURL": "https://spicrawl.com/terms",
         "defaultPrompt": [
           "Fetch https://example.com/docs/start as Markdown and summarize it.",
           "Get the headline and author from https://example.com/news/launch.",

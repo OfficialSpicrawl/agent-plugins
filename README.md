@@ -344,10 +344,8 @@ plugins/spicrawl-openai/
   has no price, trial or promotion, no comparison, and nothing marked coming soon. `shortDescription`
   and `displayName` are at most 30 characters; `defaultPrompt` has at most three entries of at most
   128 characters.
-- `supportURL`, `privacyPolicyURL` and `termsOfServiceURL` are the only placeholders left in the
-  package. They are on `todo.invalid`, a host that can never resolve, so a package built from this
-  folder fails the portal's URL checks instead of shipping a wrong link. Replace all three with
-  live HTTPS pages before building the ZIP.
+- `supportURL`, `privacyPolicyURL` and `termsOfServiceURL` point at https://spicrawl.com/support,
+  https://spicrawl.com/privacy and https://spicrawl.com/terms.
 - `extensions.com.openai.review` holds the review material the portal imports with the ZIP: five
   positive and three negative test cases, and `commerce: false` with its description.
   `extensions.com.openai.publication.release_notes` holds the release notes. The cases use only the
@@ -356,17 +354,10 @@ plugins/spicrawl-openai/
 - Build the ZIP from inside the folder, so `plugin.json` is at the archive root, and keep it out
   of the repository: `cd plugins/spicrawl-openai && zip -r /tmp/spicrawl-openai.zip .`
 - Not ready for the public directory. Still open before an upload can be submitted for review:
-  - The OAuth endpoint at `https://mcp.spicrawl.com/chatgpt/mcp` going live. The `/mcp` server
-    answers `401` with `Bearer realm="spicrawl-mcp"` and publishes no protected-resource metadata,
-    and OpenAI's authentication guide says ChatGPT cannot "present custom API keys".
-  - The three `todo.invalid` URLs above, and a reviewer demo account that works without MFA.
+  - A reviewer demo account that works without MFA.
   - The domain-verification file at `https://mcp.spicrawl.com/.well-known/openai-apps-challenge`
     (the portal shows the token).
   - `review.demo_recording_url`, the video walkthrough.
-  - A hosted tool list that matches the listing: the ChatGPT endpoint must offer only the restricted
-    tools above, with no session tools, no coming-soon browser tool and no `proxy`, `stealth` or
-    `actions` arguments. The skill in this folder still describes the full `/mcp` tool set; trim it
-    to match once the endpoint's tools are final.
 
 ## Releasing
 
