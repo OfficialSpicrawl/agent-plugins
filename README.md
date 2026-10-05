@@ -46,7 +46,7 @@ Each tool below takes the key in the way its plugin format allows.
 ### Claude Code
 
 ```sh
-claude plugin marketplace add Spicrawl/agent-plugins
+claude plugin marketplace add OfficialSpicrawl/agent-plugins
 claude plugin install spicrawl@spicrawl-plugins
 ```
 
@@ -59,7 +59,7 @@ OpenAI's portable (Agent Plugins) format: a root `plugin.json`, an `mcp.json`, a
 and `assets/`. That format has no field for a key, so the plugin carries none.
 
 ```sh
-codex plugin marketplace add Spicrawl/agent-plugins
+codex plugin marketplace add OfficialSpicrawl/agent-plugins
 ```
 
 Then run `/plugins` in Codex, pick the `Spicrawl` marketplace and install `spicrawl`. This installs
@@ -144,7 +144,7 @@ skill. Check the connection with `opencode mcp list`.
 
 ```sh
 export SPICRAWL_AUTH="Bearer spicrawl_live_..."   # the whole header value, including "Bearer "
-droid plugin marketplace add Spicrawl/agent-plugins
+droid plugin marketplace add OfficialSpicrawl/agent-plugins
 droid plugin install spicrawl@spicrawl-plugins --scope user
 ```
 
@@ -158,13 +158,13 @@ Devin asks for one credential, `SPICRAWL_AUTHORIZATION`, whose value is the whol
 `Bearer spicrawl_live_...`. The manifest is `plugins/spicrawl/.devin-plugin/plugin.json`.
 
 To reference the plugin from your own Devin plugin manifest, use a `git-subdir` source with
-`"url": "https://github.com/Spicrawl/agent-plugins.git"` and `"path": "plugins/spicrawl"`, pinned
+`"url": "https://github.com/OfficialSpicrawl/agent-plugins.git"` and `"path": "plugins/spicrawl"`, pinned
 to a commit `sha`.
 
 ### Gemini CLI
 
 ```sh
-gemini extensions install https://github.com/Spicrawl/agent-plugins
+gemini extensions install https://github.com/OfficialSpicrawl/agent-plugins
 ```
 
 Gemini asks for one setting, "Spicrawl authorization header". Enter the whole header value:
@@ -174,7 +174,7 @@ The extension loads `GEMINI.md` as context.
 ### GitHub Copilot CLI
 
 ```sh
-copilot plugin marketplace add Spicrawl/agent-plugins
+copilot plugin marketplace add OfficialSpicrawl/agent-plugins
 copilot plugin install spicrawl@spicrawl-plugins
 ```
 
@@ -192,7 +192,7 @@ machine.
 ### The skill alone (Agent Skills tools)
 
 ```sh
-npx skills add Spicrawl/agent-plugins
+npx skills add OfficialSpicrawl/agent-plugins
 ```
 
 This installs `plugins/spicrawl/skills/spicrawl/SKILL.md` into the agents you pick. The skill
@@ -225,7 +225,7 @@ The pages an agent asks Spicrawl to scrape, and the results, go through the same
 
 - MCP server docs: <https://docs.spicrawl.com/agents/mcp>
 - Website: <https://spicrawl.com>
-- SDK: <https://github.com/Spicrawl/sdk>, CLI: <https://github.com/Spicrawl/cli> (Apache-2.0)
+- SDK: <https://github.com/OfficialSpicrawl/sdk>, CLI: <https://github.com/OfficialSpicrawl/cli> (Apache-2.0)
 - Contact: dev@spicrawl.com
 
 Licensed under the Apache License 2.0. See [LICENSE](LICENSE).
@@ -248,8 +248,7 @@ Shared files in `plugins/spicrawl`:
   so no copy or symlink at the repository root is needed.
 - `logo.png`: 180x180, used by the Cursor and Devin manifests. `plugins/spicrawl-openai/assets/logo.png`
   is a byte-identical copy (a ZIP must be self-contained, and a symlink is not accepted). Change both together.
-- `.devin-plugin/plugin.json` is byte-identical to the copy submitted to Devin's
-  marketplace. Change both together.
+- `.devin-plugin/plugin.json` is the manifest prepared for Devin's marketplace.
 
 There is one MCP definition per format, in `plugins/spicrawl/`. They are separate files on
 purpose: the same server needs a different credential syntax in each tool.

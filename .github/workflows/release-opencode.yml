@@ -13,7 +13,7 @@
 #
 # The repo is public, so each release carries a provenance attestation. The
 # attestation needs opencode/package.json "repository" to match this GitHub
-# repo (Spicrawl/agent-plugins, directory "opencode").
+# repo (OfficialSpicrawl/agent-plugins, directory "opencode").
 #
 # Release: bump "version" in opencode/package.json, add a "## X.Y.Z (date)"
 # section to opencode/CHANGELOG.md, then merge to main. The CI publishes that

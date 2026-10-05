@@ -9,7 +9,7 @@
     "url": "https://spicrawl.com"
   },
   "homepage": "https://docs.spicrawl.com/agents/mcp",
-  "repository": "https://github.com/Spicrawl/agent-plugins",
+  "repository": "https://github.com/OfficialSpicrawl/agent-plugins",
   "license": "Apache-2.0",
   "keywords": ["scraping", "web", "markdown", "batch", "sessions", "mcp"],
   "mcpServers": "./mcp/claude.json",

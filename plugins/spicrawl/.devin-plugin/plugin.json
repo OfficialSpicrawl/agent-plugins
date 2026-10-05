@@ -3,7 +3,7 @@
   "displayName": "Spicrawl",
   "description": "Scrape web pages to Markdown or JSON, with batch jobs and persistent login sessions.",
   "homepage": "https://spicrawl.com",
-  "repository": "https://github.com/Spicrawl/mcp",
+  "repository": "https://github.com/OfficialSpicrawl/mcp",
   "logo": "logo.png",
   "keywords": [
     "AI & Machine Learning",

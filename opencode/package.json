@@ -25,12 +25,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Spicrawl/agent-plugins.git",
+    "url": "git+https://github.com/OfficialSpicrawl/agent-plugins.git",
     "directory": "opencode"
   },
   "homepage": "https://docs.spicrawl.com/agents/opencode",
   "bugs": {
-    "url": "https://github.com/Spicrawl/agent-plugins/issues"
+    "url": "https://github.com/OfficialSpicrawl/agent-plugins/issues"
   },
   "engines": {
     "node": ">=18"
