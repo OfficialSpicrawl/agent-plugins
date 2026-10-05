@@ -1,6 +1,6 @@
 {
   "name": "opencode-spicrawl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Spicrawl plugin for OpenCode: adds the Spicrawl MCP server so agents can scrape web pages to Markdown or JSON",
   "type": "module",
   "main": "index.js",
