@@ -153,9 +153,11 @@ for this server in the plugin's `mcp.json`.
 
 ### Devin
 
-Add it to Devin as a personal plugin from this repository (subdirectory `plugins/spicrawl`).
-Devin asks for one credential, `SPICRAWL_AUTHORIZATION`, whose value is the whole header value:
-`Bearer spicrawl_live_...`. The manifest is `plugins/spicrawl/.devin-plugin/plugin.json`.
+Add it as a personal plugin. In Devin Cloud: Customize, Plugins, Add plugin, then "From repository"
+(this repository, subdirectory `plugins/spicrawl`) or "Upload .zip" (a zip of `plugins/spicrawl`).
+Locally: `devin plugins install --local ./plugins/spicrawl`. Then connect the
+`SPICRAWL_AUTHORIZATION` credential from the plugin's Connect button; its value is the whole header
+value: `Bearer spicrawl_live_...`. The manifest is `plugins/spicrawl/.devin-plugin/plugin.json`.
 
 To reference the plugin from your own Devin plugin manifest, use a `git-subdir` source with
 `"url": "https://github.com/OfficialSpicrawl/agent-plugins.git"` and `"path": "plugins/spicrawl"`, pinned
