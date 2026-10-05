@@ -22,7 +22,7 @@ This repository holds the packaging for these tools:
 | Cursor | plugin (MCP server + skill) |
 | OpenCode | npm plugin `opencode-spicrawl` (adds the MCP server) |
 | Factory Droid | plugin (MCP server + skill) |
-| Devin | plugin (MCP server + skill), through Devin's marketplace |
+| Devin | plugin (MCP server + skill), installed from this repository |
 | Gemini CLI | extension (MCP server + context file) |
 | GitHub Copilot CLI | plugin (skill), plus one command for the MCP server |
 | Any tool that reads Agent Skills | the skill only (`npx skills add`) |
@@ -153,7 +153,7 @@ for this server in the plugin's `mcp.json`.
 
 ### Devin
 
-Devin installs plugins from its marketplace: Settings, Marketplace, pick `Spicrawl`, install.
+Add it to Devin as a personal plugin from this repository (subdirectory `plugins/spicrawl`).
 Devin asks for one credential, `SPICRAWL_AUTHORIZATION`, whose value is the whole header value:
 `Bearer spicrawl_live_...`. The manifest is `plugins/spicrawl/.devin-plugin/plugin.json`.
 
