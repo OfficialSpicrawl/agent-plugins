@@ -1,0 +1,78 @@
+identity:
+  name: batch
+  author: spicrawl
+  label:
+    en_US: Batch scrape
+description:
+  human:
+    en_US: Scrape a list of URLs as one job and return every page. Waits for the job to finish.
+  llm: Scrape several web pages (up to 100) in one call and return each page's content as markdown (default), plain text or HTML. Pass URLs one per line. If the reply says the job is still running, call again with the job_id it gives.
+parameters:
+  - name: urls
+    type: string
+    required: false
+    label:
+      en_US: URLs
+    human_description:
+      en_US: The pages to scrape, one http(s) URL per line (up to 100). Leave empty when you fill in Job ID.
+    llm_description: The http or https URLs to scrape, one per line, at most 100. Omit when job_id is given.
+    form: llm
+  - name: job_id
+    type: string
+    required: false
+    label:
+      en_US: Job ID
+    human_description:
+      en_US: Collect the results of an earlier batch job that was still running, instead of submitting new URLs.
+    llm_description: The job_id returned by an earlier call that was still running. Omit to submit new URLs.
+    form: llm
+  - name: response_format
+    type: select
+    required: false
+    default: markdown
+    label:
+      en_US: Output format
+    human_description:
+      en_US: Markdown is best for LLMs; text drops all markup; HTML returns the raw documents.
+    options:
+      - value: markdown
+        label:
+          en_US: Markdown
+      - value: text
+        label:
+          en_US: Plain text
+      - value: html
+        label:
+          en_US: HTML
+    form: form
+  - name: js_render
+    type: boolean
+    required: false
+    default: false
+    label:
+      en_US: JavaScript rendering
+    human_description:
+      en_US: Run each page's JavaScript before capturing it. Costs more credits per page.
+    form: form
+  - name: wait_seconds
+    type: number
+    required: false
+    default: 60
+    min: 5
+    max: 240
+    label:
+      en_US: Max wait (seconds)
+    human_description:
+      en_US: How long to wait for the job before returning its Job ID. Results stay available for 72 hours.
+    form: form
+  - name: proxy
+    type: secret-input
+    required: false
+    label:
+      en_US: Proxy URL
+    human_description:
+      en_US: Optional. Route every request through your own proxy (http, https, socks5 or socks5h), for example http://user:pass@host:8000.
+    form: form
+extra:
+  python:
+    source: tools/batch.py

@@ -1,0 +1,102 @@
+# Publishes the n8n community node (n8n/) to npm as n8n-nodes-spicrawl.
+#
+# n8n verifies a community node only when it was published from GitHub Actions
+# with an npm provenance attestation, so this workflow is the only way a
+# version should reach npm. The attestation needs n8n/package.json
+# "repository" to match this GitHub repo (OfficialSpicrawl/agent-plugins,
+# directory "n8n").
+#
+# Auth is the NPM_TOKEN repository secret: an npm granular access token with
+# publish rights on the package and "Bypass two-factor authentication". Write
+# tokens expire (90 days at most), so rotate the secret before then. npm ends
+# direct token publishing in January 2027; switch to trusted publishing (OIDC)
+# before then.
+#
+# Release: bump "version" in n8n/package.json, add a "## X.Y.Z" section to
+# n8n/CHANGELOG.md, merge to main, then push the tag n8n-vX.Y.Z on the merged
+# commit. The tag must match the package version. This workflow never creates
+# tags. A prerelease version (e.g. 0.2.0-beta.1) is published under the `next`
+# dist-tag so `npm install n8n-nodes-spicrawl` keeps getting latest.
+#
+# Triggers: a pushed tag n8n-v* publishes. `pull_request`, limited to changes
+# under n8n/ and to this file, runs the same install, lint, build and test and
+# stops there (the publish step needs a tag). To retry a failed publish, re-run
+# the failed run from the Actions tab.
+
+name: release-n8n
+
+on:
+  push:
+    tags: ['n8n-v*']
+  pull_request:
+    paths: ['n8n/**', '.github/workflows/release-n8n.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-n8n-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: n8n
+
+jobs:
+  npm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write # npm provenance
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: n8n/package-lock.json
+          registry-url: https://registry.npmjs.org
+      - name: install
+        run: npm ci --no-audit --no-fund
+      - name: lint
+        run: npm run lint
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm test
+      - name: tag matches package.json
+        if: startsWith(github.ref, 'refs/tags/n8n-v')
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          if [ "$GITHUB_REF_NAME" != "n8n-v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match n8n/package.json version $version"
+            exit 1
+          fi
+      - name: already on npm?
+        id: check
+        run: |
+          name="$(node -p 'require("./package.json").name')"
+          version="$(node -p 'require("./package.json").version')"
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published; nothing to do."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+          tag=latest
+          case "$version" in *-*) tag=next ;; esac
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - name: publish
+        if: steps.check.outputs.publish == 'true' && startsWith(github.ref, 'refs/tags/n8n-v')
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # package.json's prepublishOnly (n8n-node prerelease) refuses a bare
+          # `npm publish` unless this is set; `n8n-node release` sets it in CI too.
+          RELEASE_MODE: 'true'
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::the NPM_TOKEN repository secret is not set"
+            exit 1
+          fi
+          npm publish --provenance --access public --tag "${{ steps.check.outputs.tag }}"

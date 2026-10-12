@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "spicrawl",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fetch public web pages you name and return them as Markdown, HTML, text or JSON. Render JavaScript pages, extract fields with CSS selectors, and run batch jobs over lists of URLs. Requires an existing Spicrawl account.",
   "author": {
     "name": "Spicrawl",

@@ -1,0 +1,30 @@
+identity:
+  author: spicrawl
+  name: spicrawl
+  label:
+    en_US: Spicrawl
+  description:
+    en_US: Scrape any URL to clean markdown, text or HTML, pull fields out of a page with CSS selectors, and run batch scrapes with the Spicrawl web scraping API.
+  icon: icon.svg
+  icon_dark: icon-dark.svg
+  tags:
+    - search
+    - utilities
+credentials_for_provider:
+  spicrawl_api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Spicrawl API key
+    placeholder:
+      en_US: spicrawl_live_...
+    help:
+      en_US: Create a key on the API Keys page of your Spicrawl dashboard. The key needs the scrape scope, plus batch for the Batch scrape tool.
+    url: https://app.spicrawl.com/dashboard/keys
+tools:
+  - tools/scrape.yaml
+  - tools/extract.yaml
+  - tools/batch.yaml
+extra:
+  python:
+    source: provider/spicrawl.py
