@@ -1,4 +1,4 @@
-version: 0.1.0
+version: 0.1.1
 type: plugin
 author: spicrawl
 name: spicrawl
@@ -15,6 +15,7 @@ plugins:
     - provider/spicrawl.yaml
 meta:
   version: 0.0.1
+  minimum_dify_version: 1.14.2
   arch:
     - amd64
     - arm64
@@ -28,3 +29,7 @@ tags:
   - search
   - utilities
 repo: https://github.com/OfficialSpicrawl/agent-plugins/tree/main/dify
+contact: support@spicrawl.com
+network:
+  domains:
+    - api.spicrawl.com
