@@ -1,0 +1,71 @@
+identity:
+  name: extract
+  author: spicrawl
+  label:
+    en_US: Extract
+description:
+  human:
+    en_US: Pull named fields out of a page with CSS selectors, or read the page's own structured metadata.
+  llm: Extract structured fields from one web page as JSON. Give Fields as a JSON object mapping a field name to a CSS selector (for example {"title":"h1","price":".price"}), and/or turn on autoparse to read the page's built-in JSON-LD, OpenGraph and other metadata. Fields whose selector matched nothing are listed in empty_fields.
+parameters:
+  - name: url
+    type: string
+    required: true
+    label:
+      en_US: URL
+    human_description:
+      en_US: The http(s) address of the page to extract from.
+    llm_description: The full http or https URL of the page.
+    form: llm
+  - name: fields
+    type: string
+    required: false
+    label:
+      en_US: Fields (JSON)
+    human_description:
+      en_US: 'JSON object mapping a field name to a CSS selector, for example {"title": "h1", "link": "a.next@href"}. Append @attr to read an attribute. A rule object such as {"selector": ".tag", "kind": "list"} returns every match.'
+    llm_description: 'JSON object text mapping each field name to a CSS selector. Append @attribute to read an attribute, for example {"title":"h1","next_page":"a.next@href"}. Use a rule object {"selector":".tag","kind":"list"} for all matches.'
+    placeholder:
+      en_US: '{"title": "h1", "price": ".price"}'
+    form: llm
+  - name: autoparse
+    type: boolean
+    required: false
+    default: false
+    label:
+      en_US: Autoparse
+    human_description:
+      en_US: Also return the page's own metadata (JSON-LD, OpenGraph, Twitter card, microdata, embedded app state). No selectors needed.
+    llm_description: Set true to read the page's built-in structured metadata instead of, or as well as, selectors.
+    form: llm
+  - name: js_render
+    type: boolean
+    required: false
+    default: false
+    label:
+      en_US: JavaScript rendering
+    human_description:
+      en_US: Run the page's JavaScript before extracting. Use it when selectors match nothing on a script-built page. Costs more credits.
+    llm_description: Set true when fields came back empty because the page builds its content with JavaScript.
+    form: llm
+  - name: wait_for
+    type: string
+    required: false
+    label:
+      en_US: Wait for selector
+    human_description:
+      en_US: CSS selector to wait for before extracting. Turns on JavaScript rendering.
+    placeholder:
+      en_US: .price
+    form: form
+  - name: proxy
+    type: secret-input
+    required: false
+    label:
+      en_US: Proxy URL
+    human_description:
+      en_US: Optional. Route the request through your own proxy (http, https, socks5 or socks5h), for example http://user:pass@host:8000.
+    form: form
+extra:
+  python:
+    source: tools/extract.py

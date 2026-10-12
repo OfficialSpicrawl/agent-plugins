@@ -1,0 +1,98 @@
+identity:
+  name: scrape
+  author: spicrawl
+  label:
+    en_US: Scrape
+description:
+  human:
+    en_US: Fetch a web page and return it as clean markdown, plain text or HTML.
+  llm: Fetch one web page by URL and return its content as clean markdown (default), plain text or HTML. If the result is empty or looks like a loading placeholder, call again with js_render set to true.
+parameters:
+  - name: url
+    type: string
+    required: true
+    label:
+      en_US: URL
+    human_description:
+      en_US: The http(s) address of the page to scrape.
+    llm_description: The full http or https URL of the page to scrape.
+    form: llm
+  - name: js_render
+    type: boolean
+    required: false
+    default: false
+    label:
+      en_US: JavaScript rendering
+    human_description:
+      en_US: Run the page's JavaScript before capturing it. Use it when the page comes back empty. Costs more credits.
+    llm_description: Set true to run the page's JavaScript before capture. Use only when a normal scrape returned an empty or placeholder page.
+    form: llm
+  - name: response_format
+    type: select
+    required: false
+    default: markdown
+    label:
+      en_US: Output format
+    human_description:
+      en_US: Markdown is best for LLMs; text drops all markup; HTML returns the raw document.
+    options:
+      - value: markdown
+        label:
+          en_US: Markdown
+      - value: text
+        label:
+          en_US: Plain text
+      - value: html
+        label:
+          en_US: HTML
+    form: form
+  - name: main_content_only
+    type: boolean
+    required: false
+    default: true
+    label:
+      en_US: Main content only
+    human_description:
+      en_US: Strip navigation, footers and sidebars (Markdown and Text only).
+    form: form
+  - name: wait_for
+    type: string
+    required: false
+    label:
+      en_US: Wait for selector
+    human_description:
+      en_US: CSS selector to wait for before capturing, for example .price. Turns on JavaScript rendering.
+    placeholder:
+      en_US: .price
+    form: form
+  - name: include_tags
+    type: string
+    required: false
+    label:
+      en_US: Include selectors
+    human_description:
+      en_US: Comma-separated CSS selectors. Only matching parts of the page are kept.
+    placeholder:
+      en_US: article, .docs-content
+    form: form
+  - name: exclude_tags
+    type: string
+    required: false
+    label:
+      en_US: Exclude selectors
+    human_description:
+      en_US: Comma-separated CSS selectors. Matching parts of the page are removed.
+    placeholder:
+      en_US: .cookie-banner, aside
+    form: form
+  - name: proxy
+    type: secret-input
+    required: false
+    label:
+      en_US: Proxy URL
+    human_description:
+      en_US: Optional. Route the request through your own proxy (http, https, socks5 or socks5h), for example http://user:pass@host:8000.
+    form: form
+extra:
+  python:
+    source: tools/scrape.py

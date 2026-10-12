@@ -1,6 +1,6 @@
 {
   "name": "spicrawl",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Spicrawl skill for GitHub Copilot CLI. Add the MCP server separately with `copilot mcp add`; see the repository README.",
   "author": {
     "name": "Spicrawl",
