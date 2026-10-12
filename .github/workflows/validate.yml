@@ -1,7 +1,7 @@
 # Repo-wide checks: every JSON file parses, the OpenCode plugin's tests pass,
-# no file contains a real-looking Spicrawl API key, and the two integrations
-# that have code of their own pass their checks (the n8n node: lint, build,
-# test; the Dify plugin: pytest).
+# no file contains a real-looking Spicrawl API key, no file names an internal
+# engine, and the two integrations that have code of their own pass their
+# checks (the n8n node: lint, build, test; the Dify plugin: pytest).
 
 name: validate
 
@@ -38,6 +38,17 @@ jobs:
         run: |
           if git grep -nIE 'spicrawl_(live|test)_[a-z0-9]{20,}' -- . ; then
             echo "::error::a file contains something that looks like a real Spicrawl API key"
+            exit 1
+          fi
+      # Customers see three rendering tiers: fetch, js and browser. The engines
+      # behind them are internal and must not appear in any published text.
+      # Lockfiles are exempt (dependency names) and so is this file (it holds
+      # the list). "moli" matches as a whole word only.
+      - name: no internal engine names
+        run: |
+          words='(^|[^a-z])moli([^a-z]|$)|chromium|chrome|camoufox|obscura|browserless|headful|headless|playwright|puppeteer'
+          if git grep -nIiE "$words" -- . ':!*package-lock.json' ':!*pnpm-lock.yaml' ':!*.lock' ':!.github/workflows/validate.yml'; then
+            echo "::error::a tracked file names an internal engine; say fetch, js (JavaScript rendering) or browser (a full browser) instead"
             exit 1
           fi
 
