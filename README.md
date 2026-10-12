@@ -311,11 +311,11 @@ Notes:
   own `~/.cursor/mcp.json`.
 - `opencode/` is the source of the npm package `opencode-spicrawl` (OpenCode has no plugin
   marketplace format). It has its own `package.json` version and is published to npm separately
-  from these manifests, so its version does not have to match `0.2.0`.
+  from these manifests, so its version does not have to match `0.2.1`.
 - The collection version is `version` in `gemini-extension.json` and in the manifests under
   `plugins/` (`.claude-plugin`, `.cursor-plugin`, `.factory-plugin`, `.github/plugin` and
-  `spicrawl-openai/plugin.json`). It is `0.2.0` (the Dify and n8n integrations were added) and these
-  files are bumped together. `opencode/`, `dify/` and `n8n/` are versioned on their own.
+  `spicrawl-openai/plugin.json`). It is `0.2.1` (0.2.0 added the Dify and n8n integrations; 0.2.1 aligned the skill with the public
+  rendering tiers) and these files are bumped together. `opencode/`, `dify/` and `n8n/` are versioned on their own.
 - `dify/` is the Dify plugin and `n8n/` the n8n community node. Neither is a coding-agent plugin:
   they call the REST API (`https://api.spicrawl.com`), not the MCP server, and no marketplace file
   in this repository lists them. `dify/` is Python (tests: `cd dify && python -m pytest`); `n8n/` is
