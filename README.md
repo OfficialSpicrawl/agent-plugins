@@ -1,5 +1,9 @@
 # Spicrawl agent plugins
 
+[![smithery badge](https://smithery.ai/badge/spicrawl/web-scraper)](https://smithery.ai/servers/spicrawl/web-scraper)
+
+Also available as an MCP server: [Smithery](https://smithery.ai/servers/spicrawl/web-scraper) · [MCP Registry](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.OfficialSpicrawl/mcp)
+
 Spicrawl's plugins for coding agents and workflow tools, in one repository. For coding agents it
 connects the agent to the hosted Spicrawl MCP server and, in the tools that support it, gives the
 agent a skill that explains how to use it. For Dify and n8n it adds Spicrawl as a plugin or node
