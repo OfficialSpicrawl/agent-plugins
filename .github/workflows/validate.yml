@@ -1,7 +1,7 @@
 # Repo-wide checks: every JSON file parses, the OpenCode plugin's tests pass,
 # no file contains a real-looking Spicrawl API key, no file names an internal
-# engine, and the two integrations that have code of their own pass their
-# checks (the n8n node: lint, build, test; the Dify plugin: pytest).
+# engine, and the Dify plugin passes its pytest. The n8n node lives in
+# OfficialSpicrawl/n8n-nodes-spicrawl and has its own CI.
 
 name: validate
 
@@ -51,28 +51,6 @@ jobs:
             echo "::error::a tracked file names an internal engine; say fetch, js (JavaScript rendering) or browser (a full browser) instead"
             exit 1
           fi
-
-  n8n:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: n8n
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: n8n/package-lock.json
-      - name: install
-        run: npm ci --no-audit --no-fund
-      - name: lint
-        run: npm run lint
-      - name: build
-        run: npm run build
-      - name: test
-        run: npm test
 
   dify:
     runs-on: ubuntu-24.04
