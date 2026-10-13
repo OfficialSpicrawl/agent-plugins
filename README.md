@@ -27,7 +27,7 @@ This repository holds the packaging for these tools:
 | Gemini CLI | extension (MCP server + context file) |
 | GitHub Copilot CLI | plugin (skill), plus one command for the MCP server |
 | Dify | plugin `.difypkg` (Scrape, Extract and Batch scrape tools), from a GitHub release of this repository |
-| n8n | community node `n8n-nodes-spicrawl` (Scrape URL and Batch Scrape), on npm |
+| n8n | community node `n8n-nodes-spicrawl` (Scrape URL and Batch Scrape), on npm; source in [OfficialSpicrawl/n8n-nodes-spicrawl](https://github.com/OfficialSpicrawl/n8n-nodes-spicrawl) |
 | Any tool that reads Agent Skills | the skill only (`npx skills add`) |
 | Any MCP client | the MCP server, by hand |
 
@@ -211,7 +211,7 @@ See [`dify/README.md`](dify/README.md) for the tools and their parameters.
 
 ### n8n
 
-The n8n node (source in [`n8n/`](n8n), on npm as
+The n8n node (source in its own repository, [OfficialSpicrawl/n8n-nodes-spicrawl](https://github.com/OfficialSpicrawl/n8n-nodes-spicrawl), on npm as
 [`n8n-nodes-spicrawl`](https://www.npmjs.com/package/n8n-nodes-spicrawl)) is a community node with
 two operations, Scrape URL and Batch Scrape. It calls the Spicrawl API directly, not the MCP
 server.
@@ -222,7 +222,7 @@ server.
 2. Add a **Spicrawl API** credential and paste your API key into API Key.
 3. Add the **Spicrawl** node to a workflow, or let an AI Agent node call it as a tool.
 
-See [`n8n/README.md`](n8n/README.md) for the operations and options.
+See the [n8n node README](https://github.com/OfficialSpicrawl/n8n-nodes-spicrawl#readme) for the operations and options.
 
 ### The skill alone (Agent Skills tools)
 
@@ -250,7 +250,7 @@ header of API requests. Nothing here contains a key. The plugins for Claude Code
 Devin, Gemini CLI and Copilot CLI run no code of their own: they are JSON manifests, a skill file
 (Markdown) and a logo. The OpenCode plugin is a small JavaScript package (`opencode/`) that reads
 `SPICRAWL_API_KEY` and hands it to OpenCode as the MCP header; it makes no network requests
-itself. The Dify plugin (`dify/`, Python) and the n8n node (`n8n/`, TypeScript) make HTTPS requests to
+itself. The Dify plugin (`dify/`, Python) and the n8n node ([its own repository](https://github.com/OfficialSpicrawl/n8n-nodes-spicrawl), TypeScript) make HTTPS requests to
 `https://api.spicrawl.com` and nowhere else; they read the key from Dify's plugin authorization
 and from an n8n credential. Each tool reads the key from where its format allows: a sensitive
 plugin setting (Claude Code, Gemini CLI), a plugin variable you set in Cursor, an environment variable (Codex, through
@@ -315,12 +315,13 @@ Notes:
 - The collection version is `version` in `gemini-extension.json` and in the manifests under
   `plugins/` (`.claude-plugin`, `.cursor-plugin`, `.factory-plugin`, `.github/plugin` and
   `spicrawl-openai/plugin.json`). It is `0.2.1` (0.2.0 added the Dify and n8n integrations; 0.2.1 aligned the skill with the public
-  rendering tiers) and these files are bumped together. `opencode/`, `dify/` and `n8n/` are versioned on their own.
-- `dify/` is the Dify plugin and `n8n/` the n8n community node. Neither is a coding-agent plugin:
-  they call the REST API (`https://api.spicrawl.com`), not the MCP server, and no marketplace file
-  in this repository lists them. `dify/` is Python (tests: `cd dify && python -m pytest`); `n8n/` is
-  TypeScript (`cd n8n && npm ci && npm run lint && npm run build && npm test`). In a batch result
-  line, `result.content` is the page as a plain string, and JSON text only when the job's
+  rendering tiers) and these files are bumped together. `opencode/` and `dify/` are versioned on their own, and so is the n8n node, which lives in its own repository.
+- `dify/` is the Dify plugin. The n8n community node is not in this repository: its source is
+  [OfficialSpicrawl/n8n-nodes-spicrawl](https://github.com/OfficialSpicrawl/n8n-nodes-spicrawl), with the package at that repository's root because
+  n8n's verification looks for `credentials/` there. Neither is a coding-agent plugin: they call
+  the REST API (`https://api.spicrawl.com`), not the MCP server, and no marketplace file in this
+  repository lists them. `dify/` is Python (tests: `cd dify && python -m pytest`). In a batch
+  result line, `result.content` is the page as a plain string, and JSON text only when the job's
   `response_format` is `json`; both integrations use it that way.
 - The Gemini variable name must not contain `KEY`, `TOKEN`, `SECRET`, `PASSWORD`, `AUTH`,
   `CREDENTIAL`, `CERT` or `PRIVATE`: Gemini CLI removes such variables from the environment before
@@ -414,11 +415,7 @@ The OpenCode plugin (`opencode/`, npm `opencode-spicrawl`) is released by `.gith
 2. Merge to `main`. CI runs `npm ci`, the typecheck and the tests. If npm does not have that version yet, it publishes with provenance and creates a GitHub release tagged `opencode-spicrawl-vX.Y.Z` whose notes are that CHANGELOG section. A version containing `-` (for example `0.2.0-beta.1`) is published under the `next` dist-tag and marked as a prerelease.
 3. The `NPM_TOKEN` repository secret is a granular npm token for the `spicrawl` account with publish rights and 2FA bypass. It lasts at most 90 days, so rotate it before then. Move to OIDC trusted publishing before January 2027, when npm ends direct token publishing.
 
-The n8n node (`n8n/`, npm `n8n-nodes-spicrawl`) is released by `.github/workflows/release-n8n.yml`.
-
-1. Bump `version` in `n8n/package.json` and add a `## X.Y.Z` section to `n8n/CHANGELOG.md`.
-2. Merge to `main`, then push the tag `n8n-vX.Y.Z` on the merged commit (the workflow never creates tags). The tag must match `n8n/package.json`. CI runs `npm ci`, lint, build and the tests, and, if npm does not have that version yet, publishes with `npm publish --provenance` (n8n verifies community nodes only when they carry provenance). A version containing `-` goes under the `next` dist-tag. Pull requests that touch `n8n/` run the same checks without publishing.
-3. It uses the same `NPM_TOKEN` repository secret as the OpenCode release. The token needs publish rights on `n8n-nodes-spicrawl` as well.
+The n8n node (npm `n8n-nodes-spicrawl`) is released from its own repository, [OfficialSpicrawl/n8n-nodes-spicrawl](https://github.com/OfficialSpicrawl/n8n-nodes-spicrawl), by that repository's `.github/workflows/publish.yml`: bump `version` and the changelog, merge, then push the tag `vX.Y.Z`. It has its own `NPM_TOKEN` secret.
 
 The Dify plugin (`dify/`) is released by `.github/workflows/release-dify.yml`.
 
@@ -427,4 +424,4 @@ The Dify plugin (`dify/`) is released by `.github/workflows/release-dify.yml`.
 
 The other tools install straight from this repository, so they need no release step: a change is live once it is on `main`.
 
-The `validate` workflow runs on every push and pull request. It parses all JSON files, runs the OpenCode tests, runs the n8n node's lint, build and tests and the Dify plugin's pytest, and fails if any file contains something matching `spicrawl_(live|test)_[a-z0-9]{20,}`.
+The `validate` workflow runs on every push and pull request. It parses all JSON files, runs the OpenCode tests, runs the Dify plugin's pytest, and fails if any file contains something matching `spicrawl_(live|test)_[a-z0-9]{20,}`.
