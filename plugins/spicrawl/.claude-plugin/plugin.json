@@ -1,7 +1,7 @@
 {
   "name": "spicrawl",
   "displayName": "Spicrawl",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Scrape web pages to Markdown, HTML, text or JSON, run batch jobs, keep login sessions, and read request history and usage, through the hosted Spicrawl MCP server.",
   "author": {
     "name": "Spicrawl",
