@@ -10,6 +10,6 @@
   "homepage": "https://docs.spicrawl.com/agents/mcp",
   "repository": "https://github.com/OfficialSpicrawl/agent-plugins",
   "license": "Apache-2.0",
-  "keywords": ["scraping", "web", "markdown", "batch", "sessions"],
+  "keywords": ["scraping", "web-scraping", "web-scraper", "markdown", "html-to-markdown", "ai-agents", "llm", "rag", "batch", "sessions", "data-extraction", "copilot-cli"],
   "skills": "skills/"
 }
