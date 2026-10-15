@@ -2,11 +2,15 @@ identity:
   name: scrape
   author: spicrawl
   label:
-    en_US: Scrape
+    en_US: Scrape Web Page
+    zh_Hans: 抓取网页
+    ja_JP: Web ページをスクレイピング
 description:
   human:
-    en_US: Fetch a web page and return it as clean markdown, plain text or HTML.
-  llm: Fetch one web page by URL and return its content as clean markdown (default), plain text or HTML. If the result is empty or looks like a loading placeholder, call again with js_render set to true.
+    en_US: Scrape any URL to clean Markdown, plain text or HTML. Turn on JavaScript rendering for pages that build their content with scripts.
+    zh_Hans: 将任意网址抓取为干净的 Markdown、纯文本或 HTML。对依赖脚本加载内容的页面，可开启 JavaScript 渲染。
+    ja_JP: 任意の URL を、クリーンな Markdown・プレーンテキスト・HTML として取得します。スクリプトでコンテンツを生成するページでは、JavaScript レンダリングを有効にしてください。
+  llm: Scrape one web page by URL and return its main content as clean Markdown (default), plain text or HTML. Use it to read an article, documentation page, product page or any other public web page. If the result is empty or looks like a loading placeholder, call again with js_render set to true.
 parameters:
   - name: url
     type: string
@@ -34,7 +38,7 @@ parameters:
     label:
       en_US: Output format
     human_description:
-      en_US: Markdown is best for LLMs; text drops all markup; HTML returns the raw document.
+      en_US: Markdown suits LLMs well; text drops all markup; HTML returns the raw document.
     options:
       - value: markdown
         label:

@@ -2,11 +2,15 @@ identity:
   name: extract
   author: spicrawl
   label:
-    en_US: Extract
+    en_US: Extract Page Data
+    zh_Hans: 提取网页数据
+    ja_JP: ページからデータを抽出
 description:
   human:
-    en_US: Pull named fields out of a page with CSS selectors, or read the page's own structured metadata.
-  llm: Extract structured fields from one web page as JSON. Give Fields as a JSON object mapping a field name to a CSS selector (for example {"title":"h1","price":".price"}), and/or turn on autoparse to read the page's built-in JSON-LD, OpenGraph and other metadata. Fields whose selector matched nothing are listed in empty_fields.
+    en_US: Extract data from a web page as JSON. Pull named fields with CSS selectors, or read the page's own structured metadata (JSON-LD, OpenGraph).
+    zh_Hans: 以 JSON 形式提取网页数据：用 CSS 选择器提取指定字段，或读取页面自带的结构化元数据（JSON-LD、OpenGraph）。
+    ja_JP: ウェブページのデータを JSON で抽出します。CSS セレクターで指定したフィールドを取得するか、ページ自体の構造化メタデータ（JSON-LD、OpenGraph）を読み取ります。
+  llm: Extract structured data from one web page as JSON (product details, prices, titles, links). Give Fields as a JSON object mapping a field name to a CSS selector, for example {"title":"h1","price":".price"}, and/or turn on autoparse to read the page's built-in JSON-LD, OpenGraph and other metadata. Fields whose selector matched nothing are listed in empty_fields.
 parameters:
   - name: url
     type: string
