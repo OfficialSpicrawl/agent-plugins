@@ -16,7 +16,7 @@ To scrape a website in Dify, install the Spicrawl plugin, add a free Spicrawl AP
 2. Apply for an API key at https://app.spicrawl.com/dashboard/keys. The free plan includes 1,000 credits a month and needs no credit card. Keys look like `spicrawl_live_...` (spends credits) or `spicrawl_test_...` (cannot spend live credits). Give the key the `scrape` scope, plus `batch` if you will use Batch Scrape URLs. New keys have both by default.
 3. In Dify, go to **Plugins > Spicrawl > To Authorize** and paste the key. Dify checks it with a free call that spends no credits.
 
-<img src="./_assets/spicrawl-authorize.png" width="400" />
+![](./_assets/spicrawl-authorize.png)
 
 The Dify plugin runtime must be able to reach `https://api.spicrawl.com` over HTTPS (port 443). Nothing else is needed.
 
@@ -55,7 +55,7 @@ Inputs: URLs (one per line) or Job ID, Output format, JavaScript rendering, Max 
 3. Define the inputs: a URL (typed in or taken from an earlier node) and any options, such as JavaScript rendering.
 4. Run it. Pass the `text` output to an LLM node, or to whichever step in your workflow indexes content for your knowledge base.
 
-<img src="./_assets/spicrawl-workflow.png" width="400" />
+![](./_assets/spicrawl-workflow.png)
 
 ### Agent Apps
 
@@ -63,7 +63,7 @@ Inputs: URLs (one per line) or Job ID, Output format, JavaScript rendering, Max 
 2. Paste a URL in the chat and ask a question about it.
 3. The agent calls the tool, so the LLM has the latest online data from that page to answer with. If a page comes back empty, the tool descriptions tell the agent to retry with JavaScript rendering on its own.
 
-<img src="./_assets/spicrawl-agent.png" width="400" />
+![](./_assets/spicrawl-agent.png)
 
 ## FAQ
 
