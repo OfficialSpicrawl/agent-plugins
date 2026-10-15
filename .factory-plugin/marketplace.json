@@ -1,13 +1,13 @@
 {
   "name": "spicrawl-plugins",
-  "description": "Spicrawl's plugin for coding agents: scrape web pages, run batch jobs, keep login sessions.",
+  "description": "Web scraping for AI coding agents: the Spicrawl plugin fetches web pages as Markdown, runs batch jobs and keeps login sessions.",
   "owner": {
     "name": "Spicrawl"
   },
   "plugins": [
     {
       "name": "spicrawl",
-      "description": "Scrape web pages to Markdown, HTML, text or JSON, run batch jobs, keep login sessions, and read request history and usage, through the hosted Spicrawl MCP server.",
+      "description": "Web scraping for AI coding agents through the hosted Spicrawl MCP server: fetch a URL as clean Markdown, HTML, text or JSON, render JavaScript pages, extract fields with CSS selectors, run batch jobs and keep login sessions.",
       "source": "./plugins/spicrawl",
       "homepage": "https://docs.spicrawl.com/agents/mcp"
     }

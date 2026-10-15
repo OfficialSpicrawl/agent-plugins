@@ -17,7 +17,17 @@
     "opencode-plugin",
     "spicrawl",
     "mcp",
-    "web-scraping"
+    "mcp-server",
+    "model-context-protocol",
+    "web-scraping",
+    "web-scraper",
+    "scraper",
+    "markdown",
+    "html-to-markdown",
+    "ai-agents",
+    "llm",
+    "rag",
+    "data-extraction"
   ],
   "license": "Apache-2.0",
   "author": {
