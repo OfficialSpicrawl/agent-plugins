@@ -1,4 +1,4 @@
-version: 0.1.4
+version: 0.1.5
 type: plugin
 author: spicrawl
 name: spicrawl
@@ -11,7 +11,6 @@ description:
   zh_Hans: Dify 网页抓取工具：将任意网址抓取为适合 LLM、RAG 和 AI 智能体使用的干净 Markdown，支持 JavaScript 渲染、字段提取，以及一次最多 100 个网址的批量抓取。
   ja_JP: Dify 用 Web スクレイパー。任意の Web サイトを LLM・RAG・AI エージェント向けのクリーンな Markdown に変換。JavaScript レンダリング、フィールド抽出、最大 100 件の URL の一括取得に対応。
 icon: icon.svg
-icon_dark: icon-dark.svg
 resource:
   memory: 268435456
 plugins:
