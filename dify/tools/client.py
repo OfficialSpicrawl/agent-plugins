@@ -6,7 +6,7 @@ from typing import Any
 import requests
 
 API_BASE = "https://api.spicrawl.com"
-USER_AGENT = "spicrawl-dify-plugin/0.1.4"
+USER_AGENT = "spicrawl-dify-plugin/0.1.5"
 # Target statuses Spicrawl bills as a success; anything else is returned at 0 credits.
 BILLED_STATUSES = (200, 404, 410)
 
