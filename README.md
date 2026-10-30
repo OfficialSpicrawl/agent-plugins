@@ -1,6 +1,7 @@
 # Spicrawl agent plugins: web scraping for Claude Code, Cursor, Codex and Gemini CLI
 
 [![smithery badge](https://smithery.ai/badge/spicrawl/web-scraper)](https://smithery.ai/servers/spicrawl/web-scraper)
+[![M8ven Score](https://m8ven.ai/badge/mcp/officialspicrawl-agent-plugins-1wxo06?v=e14d0b2e7bd0e766d550131b0f3a0b3e)](https://m8ven.ai/mcp/officialspicrawl-agent-plugins-1wxo06?s=readme)
 
 **How do I give Claude Code, Cursor, Codex or Gemini CLI web scraping?** Connect the agent to
 Spicrawl's hosted [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server at
