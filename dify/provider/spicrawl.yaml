@@ -1,0 +1,35 @@
+identity:
+  author: spicrawl
+  name: spicrawl
+  label:
+    en_US: Spicrawl Web Scraper
+    zh_Hans: Spicrawl 网页抓取
+    ja_JP: Spicrawl Web スクレイパー
+  description:
+    en_US: Web scraper for Dify. Scrape any website to clean Markdown for LLMs, RAG and AI agents, render JavaScript pages, extract fields and batch scrape up to 100 URLs.
+    zh_Hans: Dify 网页抓取工具：将任意网址抓取为适合 LLM、RAG 和 AI 智能体使用的干净 Markdown，支持 JavaScript 渲染、字段提取，以及一次最多 100 个网址的批量抓取。
+    ja_JP: Dify 用 Web スクレイパー。任意の Web サイトを LLM・RAG・AI エージェント向けのクリーンな Markdown に変換。JavaScript レンダリング、フィールド抽出、最大 100 件の URL の一括取得に対応。
+  icon: icon.svg
+  tags:
+    - search
+    - utilities
+    - rag
+    - business
+credentials_for_provider:
+  spicrawl_api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Spicrawl API key
+    placeholder:
+      en_US: spicrawl_live_...
+    help:
+      en_US: Create a free key on the API Keys page of your Spicrawl dashboard (the free plan includes 1,000 credits a month). The key needs the scrape scope, plus batch for the Batch scrape tool.
+    url: https://app.spicrawl.com/dashboard/keys
+tools:
+  - tools/scrape.yaml
+  - tools/extract.yaml
+  - tools/batch.yaml
+extra:
+  python:
+    source: provider/spicrawl.py

@@ -1,7 +1,7 @@
 {
   "name": "spicrawl",
-  "version": "0.1.0",
-  "description": "Scrape web pages to Markdown, HTML, text or JSON, run batch jobs, keep login sessions, and read request history and usage, through the hosted Spicrawl MCP server.",
+  "version": "0.2.2",
+  "description": "Web scraping for AI coding agents through the hosted Spicrawl MCP server: fetch a URL as clean Markdown, HTML, text or JSON, render JavaScript pages, extract fields with CSS selectors, run batch jobs and keep login sessions.",
   "contextFileName": "GEMINI.md",
   "mcpServers": {
     "spicrawl": {

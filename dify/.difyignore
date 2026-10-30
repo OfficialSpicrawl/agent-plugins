@@ -1,0 +1,16 @@
+# Keep the .difypkg to runtime files only.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+.git/
+.gitignore
+.github/
+.idea/
+.vscode/
+.DS_Store
+*.difypkg
+tests/
+dist/

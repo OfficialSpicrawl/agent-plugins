@@ -1,0 +1,60 @@
+# Packages the Dify plugin (dify/) as a .difypkg with the Dify plugin CLI and
+# attaches it to a GitHub release. Dify installs it from that release
+# (Plugins, Install plugin, GitHub) or from the downloaded file.
+#
+# Release: bump "version" in dify/manifest.yaml, merge to main, then push the
+# tag dify-vX.Y.Z on the merged commit. The tag must match the manifest
+# version. This workflow never creates tags.
+#
+# The CLI is pinned to one release and checked against its SHA-256 before it
+# runs. To upgrade it, change both values below together:
+#   curl -fsSL https://github.com/langgenius/dify-plugin-daemon/releases/download/<version>/dify-plugin-linux-amd64 | sha256sum
+
+name: release-dify
+
+on:
+  push:
+    tags: ['dify-v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-dify-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DIFY_CLI_VERSION: 0.6.10
+  DIFY_CLI_SHA256: 0cef74bcae375a4337c2ff7d42e4787717981a795e1c23cf56bb27ec07ec8304
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # the GitHub release
+    steps:
+      - uses: actions/checkout@v4
+      - name: tag matches the manifest
+        run: |
+          version="$(awk '/^version:/ { print $2; exit }' dify/manifest.yaml)"
+          if [ "$GITHUB_REF_NAME" != "dify-v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match dify/manifest.yaml version $version"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: install the Dify CLI
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/dify-plugin" \
+            "https://github.com/langgenius/dify-plugin-daemon/releases/download/$DIFY_CLI_VERSION/dify-plugin-linux-amd64"
+          echo "$DIFY_CLI_SHA256  $RUNNER_TEMP/dify-plugin" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/dify-plugin"
+      - name: package
+        run: '"$RUNNER_TEMP/dify-plugin" plugin package dify -o "$RUNNER_TEMP/spicrawl-$VERSION.difypkg"'
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/spicrawl-$VERSION.difypkg" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Spicrawl plugin for Dify $VERSION. Install it in Dify under Plugins, Install plugin, GitHub (this repository, this release), or upload spicrawl-$VERSION.difypkg."

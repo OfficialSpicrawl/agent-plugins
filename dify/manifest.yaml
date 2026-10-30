@@ -1,0 +1,46 @@
+version: 0.1.5
+type: plugin
+author: spicrawl
+name: spicrawl
+label:
+  en_US: Spicrawl Web Scraper
+  zh_Hans: Spicrawl 网页抓取
+  ja_JP: Spicrawl Web スクレイパー
+description:
+  en_US: Web data extraction for Dify AI agents. Scrape any website to LLM-ready Markdown or JSON, extract structured data with AI or CSS selectors, render JavaScript, manage sessions for logged-in content, and batch scrape at scale. Built for RAG pipelines, market research, and workflow automation.
+  zh_Hans: Dify AI 智能体的网页数据提取工具。将任意网址抓取为 LLM 可用的 Markdown 或 JSON，使用 AI 或 CSS 选择器提取结构化数据，支持 JavaScript 渲染、会话管理和登录内容访问、大规模批量抓取。为 RAG 流程、市场研究和工作流自动化而构建。
+  ja_JP: Dify AI エージェント向けのウェブデータ抽出ツール。任意の Web サイトを LLM 対応の Markdown または JSON に抽出。AI または CSS セレクタで構造化データを抽出、JavaScript レンダリング、セッション管理、ログイン内容へのアクセス、大規模バッチ取得に対応。RAG パイプライン、市場調査、ワークフロー自動化用。
+icon: icon.svg
+resource:
+  memory: 268435456
+plugins:
+  tools:
+    - provider/spicrawl.yaml
+meta:
+  version: 0.0.1
+  minimum_dify_version: 1.14.2
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+created_at: 2026-10-12T12:00:00Z
+privacy: PRIVACY.md
+tags:
+  - data-extraction
+  - web-scraping
+  - ai-agents
+  - structured-data
+  - rag
+  - workflow-automation
+  - market-research
+  - javascript-rendering
+  - automation
+  - ai-powered
+repo: https://github.com/OfficialSpicrawl/agent-plugins/tree/main/dify
+contact: support@spicrawl.com
+network:
+  domains:
+    - api.spicrawl.com

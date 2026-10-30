@@ -1,6 +1,6 @@
 {
   "name": "opencode-spicrawl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Spicrawl plugin for OpenCode: adds the Spicrawl MCP server so agents can scrape web pages to Markdown or JSON",
   "type": "module",
   "main": "index.js",
@@ -17,7 +17,17 @@
     "opencode-plugin",
     "spicrawl",
     "mcp",
-    "web-scraping"
+    "mcp-server",
+    "model-context-protocol",
+    "web-scraping",
+    "web-scraper",
+    "scraper",
+    "markdown",
+    "html-to-markdown",
+    "ai-agents",
+    "llm",
+    "rag",
+    "data-extraction"
   ],
   "license": "Apache-2.0",
   "author": {
@@ -25,12 +35,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Spicrawl/agent-plugins.git",
+    "url": "git+https://github.com/OfficialSpicrawl/agent-plugins.git",
     "directory": "opencode"
   },
   "homepage": "https://docs.spicrawl.com/agents/opencode",
   "bugs": {
-    "url": "https://github.com/Spicrawl/agent-plugins/issues"
+    "url": "https://github.com/OfficialSpicrawl/agent-plugins/issues"
   },
   "engines": {
     "node": ">=18"

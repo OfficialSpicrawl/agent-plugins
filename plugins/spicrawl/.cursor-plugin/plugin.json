@@ -1,17 +1,19 @@
 {
   "name": "spicrawl",
   "displayName": "Spicrawl",
-  "version": "0.1.0",
-  "description": "Scrape web pages to Markdown, HTML, text or JSON, run batch jobs, keep login sessions, and read request history and usage, through the hosted Spicrawl MCP server.",
+  "version": "0.2.2",
+  "description": "Web scraping for AI coding agents through the hosted Spicrawl MCP server: fetch a URL as clean Markdown, HTML, text or JSON, render JavaScript pages, extract fields with CSS selectors, run batch jobs and keep login sessions.",
   "author": {
     "name": "Spicrawl",
     "email": "dev@spicrawl.com"
   },
   "homepage": "https://docs.spicrawl.com/agents/mcp",
-  "repository": "https://github.com/Spicrawl/agent-plugins",
+  "repository": "https://github.com/OfficialSpicrawl/agent-plugins",
   "license": "Apache-2.0",
   "logo": "logo.png",
-  "keywords": ["scraping", "web", "markdown", "batch", "sessions", "mcp"],
+  "keywords": ["scraping", "web-scraping", "web-scraper", "markdown", "html-to-markdown", "mcp", "mcp-server", "ai-agents", "llm", "rag", "batch", "sessions", "data-extraction", "cursor"],
+  "category": "integrations",
+  "tags": ["web-scraping", "web-scraper", "markdown", "batch", "sessions", "mcp", "ai-agents", "data-extraction"],
   "skills": "skills",
   "mcpServers": "./mcp/cursor.json",
   "variables": {
