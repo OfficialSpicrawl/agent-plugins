@@ -25,6 +25,7 @@ This repository holds the packaging for these tools:
 | Devin | plugin (MCP server + skill), through Devin's marketplace |
 | Gemini CLI | extension (MCP server + context file) |
 | GitHub Copilot CLI | plugin (skill), plus one command for the MCP server |
+| OpenBot | Marketplace app (MCP server + API key auth) |
 | Any tool that reads Agent Skills | the skill only (`npx skills add`) |
 | Any MCP client | the MCP server, by hand |
 
@@ -189,6 +190,22 @@ copilot mcp add --transport http spicrawl https://mcp.spicrawl.com/mcp \
 Your shell expands the variable, so the key is written to Copilot's MCP config file on your
 machine.
 
+### OpenBot
+
+In OpenBot, go to **Marketplace → Apps**, search for **Spicrawl**, and connect it. OpenBot asks for
+a Spicrawl API key and forwards it as `Authorization: Bearer <key>` to the hosted MCP server at
+`https://mcp.spicrawl.com/mcp`.
+
+Until the listing is live in OpenBot's catalog, add the server manually in **Server settings → MCP
+servers**:
+
+| Setting | Value |
+|---|---|
+| Name | `spicrawl` |
+| Transport | HTTP |
+| URL | `https://mcp.spicrawl.com/mcp` |
+| Header | `Authorization: Bearer <your key>` |
+
 ### The skill alone (Agent Skills tools)
 
 ```sh
@@ -211,13 +228,13 @@ describes the Spicrawl tools, the CLI and the HTTP API. It does not connect the 
 
 The API key is sent only to `mcp.spicrawl.com`, in the `Authorization` header of MCP requests.
 Nothing here contains a key. The plugins for Claude Code, Codex and ChatGPT, Cursor, Factory Droid,
-Devin, Gemini CLI and Copilot CLI run no code of their own: they are JSON manifests, a skill file
+Devin, Gemini CLI, Copilot CLI and OpenBot run no code of their own: they are JSON manifests, a skill file
 (Markdown) and a logo. The OpenCode plugin is a small JavaScript package (`opencode/`) that reads
 `SPICRAWL_API_KEY` and hands it to OpenCode as the MCP header; it makes no network requests
 itself. Each tool reads the key from where its format allows: a sensitive plugin setting (Claude
 Code, Gemini CLI), a plugin variable you set in Cursor, an environment variable (Codex, through
-your own `config.toml` entry; Factory Droid; OpenCode), a credential you enter in Devin, or the
-command you type (Copilot CLI, any MCP client).
+your own `config.toml` entry; Factory Droid; OpenCode), a credential you enter in Devin or OpenBot,
+or the command you type (Copilot CLI, any MCP client).
 
 The pages an agent asks Spicrawl to scrape, and the results, go through the same server.
 
