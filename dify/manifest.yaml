@@ -29,16 +29,13 @@ meta:
 created_at: 2026-10-12T12:00:00Z
 privacy: PRIVACY.md
 tags:
-  - data-extraction
-  - web-scraping
-  - ai-agents
-  - structured-data
+  - search
+  - productivity
+  - business
+  - utilities
+  - agent
   - rag
-  - workflow-automation
-  - market-research
-  - javascript-rendering
-  - automation
-  - ai-powered
+  - other
 repo: https://github.com/OfficialSpicrawl/agent-plugins/tree/main/dify
 contact: support@spicrawl.com
 network:
