@@ -35,9 +35,16 @@ Replace `OPENAI_APP_ID` with the real app ID from your OpenAI registered app bef
 
 ## Install from a release ZIP
 
-1. Download the release ZIP for the Spicrawl OpenAI plugin.
-2. Make sure `.app.json` contains the real `OPENAI_APP_ID` for your registered app.
+1. Download `spicrawl-openai-<version>.zip` from the [GitHub releases page](https://github.com/OfficialSpicrawl/agent-plugins/releases).
+2. Make sure `.app.json` inside the ZIP contains the real `OPENAI_APP_ID` for your registered app (CI injects this automatically when building the release ZIP).
 3. Upload the ZIP through the ChatGPT plugin or GPT installation flow.
 4. Complete OAuth with your Spicrawl account when prompted.
+
+## Releases
+
+| Version | What changed |
+|---|---|
+| 0.2.3 | Added registered ChatGPT app mapping (`.app.json`) so the plugin is available on ChatGPT mobile and web, not only desktop. |
+| 0.2.2 | Initial public release for ChatGPT/Codex: fetch, render, extract, batch, and docs search tools. |
 
 For development details, see the [Spicrawl agent docs](https://docs.spicrawl.com/agents/mcp).

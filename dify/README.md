@@ -92,6 +92,20 @@ Inputs: URLs (one per line) or Job ID, Output format, JavaScript rendering, Max 
 - Contact: support@spicrawl.com
 - Privacy: see [PRIVACY.md](PRIVACY.md)
 
+## Releases
+
+Download `spicrawl-<version>.difypkg` from the [GitHub releases page](https://github.com/OfficialSpicrawl/agent-plugins/releases), then install it in Dify:
+
+1. In Dify, go to **Plugins** → **Install plugin** → **GitHub**.
+2. Select this repository and the release, or upload the downloaded `.difypkg` file.
+
+### Recent versions
+
+| Version | What changed |
+|---|---|
+| 0.1.6 | Added automated GitHub releases; fixed manifest tags to match Dify's allowed tag enum. |
+| 0.1.5 | Initial release with Scrape, Extract, and Batch scrape tools. |
+
 ## Development
 
 ```bash

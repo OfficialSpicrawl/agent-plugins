@@ -69,6 +69,20 @@ The same result with no plugin, in `opencode.json`:
 }
 ```
 
+## Releases
+
+The package is published to npm as [`opencode-spicrawl`](https://www.npmjs.com/package/opencode-spicrawl). OpenCode installs it automatically when it appears in your `opencode.json` plugin list.
+
+You can also download the source ZIP from the [GitHub releases page](https://github.com/OfficialSpicrawl/agent-plugins/releases) for `opencode-spicrawl-v<version>`.
+
+### Recent versions
+
+| Version | What changed |
+|---|---|
+| 0.1.2 | Added automated GitHub and npm releases as part of the coordinated plugin release pipeline. |
+| 0.1.1 | Updated repository links to `OfficialSpicrawl/agent-plugins`. |
+| 0.1.0 | First release: adds the Spicrawl remote MCP server from `SPICRAWL_API_KEY`. |
+
 ## Links
 
 - Docs: <https://docs.spicrawl.com/agents/opencode>
