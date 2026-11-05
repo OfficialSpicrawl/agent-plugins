@@ -1,0 +1,52 @@
+# Packages the Factory (Droid) plugin (plugins/spicrawl/) as
+# spicrawl-factory-<version>.zip and attaches it to a GitHub release.
+#
+# Trigger: push a factory-v* tag. The tag must match the version in
+# plugins/spicrawl/.factory-plugin/plugin.json.
+#
+# The zip contains the full contents of plugins/spicrawl/ so that, after
+# unzip, the manifest is available at .factory-plugin/plugin.json.
+
+name: release-factory
+
+on:
+  push:
+    tags: ['factory-v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-factory-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # the GitHub release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: tag matches the manifest
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.factory-plugin/plugin.json)"
+          if [ "$GITHUB_REF_NAME" != "factory-v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match plugins/spicrawl/.factory-plugin/plugin.json version $version"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: package
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-factory-$VERSION.zip" .
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/spicrawl-factory-$VERSION.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Spicrawl plugin for Factory $VERSION."

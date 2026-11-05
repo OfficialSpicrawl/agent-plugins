@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 (2026-11-05)
+
+Coordinated release bump: aligns package version with the shared Spicrawl plugin collection v0.2.3 and the Dify/OpenBot plugin releases. Includes the OpenAI mobile/desktop plugin fix.
+
 ## 0.1.1 (2026-10-05)
 
 The repository moved to https://github.com/OfficialSpicrawl/agent-plugins; the package links point there now. No behaviour change.

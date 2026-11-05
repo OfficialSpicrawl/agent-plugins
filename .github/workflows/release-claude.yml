@@ -1,0 +1,52 @@
+# Packages the Claude plugin (plugins/spicrawl/) as
+# spicrawl-claude-<version>.zip and attaches it to a GitHub release.
+#
+# Trigger: push a claude-v* tag. The tag must match the version in
+# plugins/spicrawl/.claude-plugin/plugin.json.
+#
+# The zip contains the full contents of plugins/spicrawl/ so that, after
+# unzip, the manifest is available at .claude-plugin/plugin.json.
+
+name: release-claude
+
+on:
+  push:
+    tags: ['claude-v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-claude-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # the GitHub release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: tag matches the manifest
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.claude-plugin/plugin.json)"
+          if [ "$GITHUB_REF_NAME" != "claude-v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match plugins/spicrawl/.claude-plugin/plugin.json version $version"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: package
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-claude-$VERSION.zip" .
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/spicrawl-claude-$VERSION.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Spicrawl plugin for Claude $VERSION."

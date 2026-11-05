@@ -6,7 +6,7 @@
   "category": "research",
   "creatorName": "Spicrawl",
   "iconUrl": "https://spicrawl.com/favicon.ico",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "prompts": [
     { "id": "prompt-scrape", "text": "Fetch this page as clean Markdown." },
     { "id": "prompt-research", "text": "Research these competitors and cite each source." },

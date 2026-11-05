@@ -1,0 +1,50 @@
+# Packages the OpenBot plugin as spicrawl-openbot-<version>.zip and attaches
+# it to a GitHub release.
+#
+# Trigger: push an openbot-v* tag. The tag must match the version in
+# openbot/plugin.json.
+#
+# The zip contains openbot/plugin.json and openbot/README.md.
+
+name: release-openbot
+
+on:
+  push:
+    tags: ['openbot-v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-openbot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # the GitHub release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: tag matches the manifest
+        run: |
+          version="$(jq -r '.version' openbot/plugin.json)"
+          if [ "$GITHUB_REF_NAME" != "openbot-v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match openbot/plugin.json version $version"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: package
+        run: |
+          zip -r "$RUNNER_TEMP/spicrawl-openbot-$VERSION.zip" openbot/plugin.json openbot/README.md
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/spicrawl-openbot-$VERSION.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Spicrawl plugin for OpenBot $VERSION."

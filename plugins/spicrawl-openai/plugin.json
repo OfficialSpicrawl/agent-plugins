@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "spicrawl",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Fetch public web pages you name and return them as Markdown, HTML, text or JSON. Render JavaScript pages, extract fields with CSS selectors, and run batch jobs over lists of URLs. Requires an existing Spicrawl account.",
   "author": {
     "name": "Spicrawl",
@@ -14,6 +14,7 @@
   "keywords": ["scraping", "web", "markdown", "batch"],
   "extensions": {
     "com.openai": {
+      "apps": "./.app.json",
       "interface": {
         "displayName": "Spicrawl",
         "shortDescription": "Fetch web pages as Markdown",
@@ -97,7 +98,7 @@
         "commerce_description": "This plugin does not sell products or services and has no checkout, plans or prices. It works through the user's existing Spicrawl account and never offers a purchase or an upgrade."
       },
       "publication": {
-        "release_notes": "Initial release. Fetch a public page you name as Markdown, text, HTML or JSON; render JavaScript pages; extract fields with CSS selectors; run batch jobs of up to 25 URLs and read the results; search Spicrawl's docs. Connects to your Spicrawl account through OAuth."
+        "release_notes": "Adds mobile and web support through a registered ChatGPT app mapping. Fetch a public page you name as Markdown, text, HTML or JSON; render JavaScript pages; extract fields with CSS selectors; run batch jobs of up to 25 URLs and read the results; search Spicrawl's docs. Connects to your Spicrawl account through OAuth."
       }
     }
   }
