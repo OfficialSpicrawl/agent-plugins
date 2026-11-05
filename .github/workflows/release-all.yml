@@ -1,0 +1,97 @@
+# Builds every plugin/artifact format on a single v* tag and attaches all of
+# them to one GitHub release.
+#
+# Trigger: push a v* tag. The version used for artifact names is the tag with
+# the leading "v" removed.
+#
+# This workflow does not publish to npm or the Dify Marketplace. The packaging
+# steps mirror the individual release-*.yml workflows.
+
+name: release-all
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-all-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  package-and-release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write # the GitHub release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: derive version from tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: package openai
+        env:
+          OPENAI_APP_ID: ${{ secrets.OPENAI_APP_ID }}
+        run: |
+          if [ -z "$OPENAI_APP_ID" ]; then
+            echo "::error::the OPENAI_APP_ID repository secret is not set"
+            exit 1
+          fi
+          jq '.apps.spicrawl.id = env.OPENAI_APP_ID' plugins/spicrawl-openai/.app.json > "$RUNNER_TEMP/.app.json"
+          mv "$RUNNER_TEMP/.app.json" plugins/spicrawl-openai/.app.json
+          cd plugins/spicrawl-openai
+          zip -r "$RUNNER_TEMP/spicrawl-openai-$VERSION.zip" .
+
+      - name: package cursor
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-cursor-$VERSION.zip" .
+
+      - name: package claude
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-claude-$VERSION.zip" .
+
+      - name: package factory
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-factory-$VERSION.zip" .
+
+      - name: package devin
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-devin-$VERSION.zip" .
+
+      - name: package copilot
+        run: |
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-copilot-$VERSION.zip" .
+
+      - name: package gemini
+        run: |
+          zip -r "$RUNNER_TEMP/spicrawl-gemini-$VERSION.zip" gemini-extension.json GEMINI.md LICENSE README.md
+
+      - name: package openbot
+        run: |
+          zip -r "$RUNNER_TEMP/spicrawl-openbot-$VERSION.zip" openbot/plugin.json openbot/README.md
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "$RUNNER_TEMP/spicrawl-openai-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-cursor-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-claude-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-factory-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-devin-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-copilot-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-gemini-$VERSION.zip" \
+            "$RUNNER_TEMP/spicrawl-openbot-$VERSION.zip" \
+            --title "$GITHUB_REF_NAME" \
+            --notes "Spicrawl plugins release $VERSION."
