@@ -1,0 +1,344 @@
+# Automatically releases every plugin format when a PR is merged to main.
+#
+# Each plugin has its own job. A job checks whether a release for the current
+# manifest version already exists; if not, it builds the artifact and creates
+# the GitHub release. Jobs run in parallel, so a failure in one plugin release
+# does not block the others.
+#
+# This means: after bumping versions in a PR and merging to main, every plugin
+# that has a new version will be published without manually pushing tags.
+#
+# Tag-based workflows (release-*.yml, release-all.yml) remain available as a
+# manual fallback.
+
+name: release-all-on-merge
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-all-on-merge-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DIFY_CLI_VERSION: 0.6.10
+  DIFY_CLI_SHA256: 0cef74bcae375a4337c2ff7d42e4787717981a795e1c23cf56bb27ec07ec8304
+
+jobs:
+  openai:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release OpenAI plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OPENAI_APP_ID: ${{ secrets.OPENAI_APP_ID }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl-openai/plugin.json)"
+          tag="openai-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "OpenAI release $tag already exists; skipping"
+            exit 0
+          fi
+          if [ -z "$OPENAI_APP_ID" ]; then
+            echo "::error::the OPENAI_APP_ID repository secret is not set"
+            exit 1
+          fi
+          jq '.apps.spicrawl.id = env.OPENAI_APP_ID' plugins/spicrawl-openai/.app.json > "$RUNNER_TEMP/.app.json"
+          mv "$RUNNER_TEMP/.app.json" plugins/spicrawl-openai/.app.json
+          cd plugins/spicrawl-openai
+          zip -r "$RUNNER_TEMP/spicrawl-openai-$version.zip" .
+          cd ../..
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-openai-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for OpenAI $version."
+
+  cursor:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release Cursor plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.cursor-plugin/plugin.json)"
+          tag="cursor-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Cursor release $tag already exists; skipping"
+            exit 0
+          fi
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-cursor-$version.zip" .
+          cd ../..
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-cursor-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for Cursor $version."
+
+  claude:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release Claude Code plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.claude-plugin/plugin.json)"
+          tag="claude-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Claude release $tag already exists; skipping"
+            exit 0
+          fi
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-claude-$version.zip" .
+          cd ../..
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-claude-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for Claude Code $version."
+
+  factory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release Factory Droid plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.factory-plugin/plugin.json)"
+          tag="factory-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Factory release $tag already exists; skipping"
+            exit 0
+          fi
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-factory-$version.zip" .
+          cd ../..
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-factory-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for Factory Droid $version."
+
+  devin:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release Devin plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.claude-plugin/plugin.json)"
+          tag="devin-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Devin release $tag already exists; skipping"
+            exit 0
+          fi
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-devin-$version.zip" .
+          cd ../..
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-devin-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for Devin $version."
+
+  copilot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release GitHub Copilot CLI plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl/.github/plugin/plugin.json)"
+          tag="copilot-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Copilot release $tag already exists; skipping"
+            exit 0
+          fi
+          cd plugins/spicrawl
+          zip -r "$RUNNER_TEMP/spicrawl-copilot-$version.zip" .
+          cd ../..
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-copilot-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for GitHub Copilot CLI $version."
+
+  gemini:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release Gemini CLI plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' gemini-extension.json)"
+          tag="gemini-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Gemini release $tag already exists; skipping"
+            exit 0
+          fi
+          zip -r "$RUNNER_TEMP/spicrawl-gemini-$version.zip" gemini-extension.json GEMINI.md LICENSE README.md
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-gemini-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl extension for Gemini CLI $version."
+
+  openbot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: release OpenBot plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' openbot/plugin.json)"
+          tag="openbot-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "OpenBot release $tag already exists; skipping"
+            exit 0
+          fi
+          zip -r "$RUNNER_TEMP/spicrawl-openbot-$version.zip" openbot/plugin.json openbot/README.md
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-openbot-$version.zip" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for OpenBot $version."
+
+  dify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: install the Dify CLI
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/dify-plugin" \
+            "https://github.com/langgenius/dify-plugin-daemon/releases/download/$DIFY_CLI_VERSION/dify-plugin-linux-amd64"
+          echo "$DIFY_CLI_SHA256  $RUNNER_TEMP/dify-plugin" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/dify-plugin"
+      - name: release Dify plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(awk '/^version:/ { print $2; exit }' dify/manifest.yaml)"
+          tag="dify-v$version"
+          if gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Dify release $tag already exists; skipping"
+            exit 0
+          fi
+          "$RUNNER_TEMP/dify-plugin" plugin package dify -o "$RUNNER_TEMP/spicrawl-$version.difypkg"
+          gh release create "$tag" "$RUNNER_TEMP/spicrawl-$version.difypkg" \
+            --target "$GITHUB_SHA" --title "$tag" \
+            --notes "Spicrawl plugin for Dify $version."
+
+  opencode:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: opencode
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: opencode/package-lock.json
+          registry-url: https://registry.npmjs.org
+      - name: install
+        run: npm ci --no-audit --no-fund
+      - name: typecheck
+        run: npm run check
+      - name: test
+        run: npm test
+      - name: publish to npm and create GitHub release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          name="$(node -p 'require("./package.json").name')"
+          version="$(node -p 'require("./package.json").version')"
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published; skipping"
+            exit 0
+          fi
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::the NPM_TOKEN repository secret is not set"
+            exit 1
+          fi
+          tag=latest
+          case "$version" in *-*) tag=next ;; esac
+          npm publish --provenance --access public --tag "$tag"
+          ghtag="opencode-spicrawl-v$version"
+          awk -v v="$version" 'index($0, "## " v " ") == 1 { f = 1; next } f && /^## / { exit } f' \
+            CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          [ -s "$RUNNER_TEMP/notes.md" ] || echo "Published opencode-spicrawl@$version to npm." > "$RUNNER_TEMP/notes.md"
+          flags=()
+          case "$version" in *-*) flags+=(--prerelease) ;; esac
+          gh release create "$ghtag" --target "$GITHUB_SHA" --title "$ghtag" \
+            --notes-file "$RUNNER_TEMP/notes.md" "${flags[@]}"
+
+  unified:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    needs: [openai, cursor, claude, factory, devin, copilot, gemini, openbot, dify, opencode]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: create or update unified v* release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(jq -r '.version' plugins/spicrawl-openai/plugin.json)"
+          tag="v$version"
+          gh release view "$tag" --repo "${{ github.repository }}" >/dev/null 2>&1 && {
+            echo "Unified release $tag already exists; skipping"
+            exit 0
+          }
+          # Collect artifacts from all per-format releases for this version.
+          # We download them from the existing releases and re-attach them to
+          # a single v* release page.
+          mkdir -p "$RUNNER_TEMP/assets"
+          for suffix in openai cursor claude factory devin copilot gemini openbot; do
+            asset="spicrawl-$suffix-$version.zip"
+            [ "$suffix" = "openai" ] && asset="spicrawl-openai-$version.zip"
+            release_tag="$suffix-v$version"
+            gh release download "$release_tag" --repo "${{ github.repository }}" \
+              --pattern "$asset" --dir "$RUNNER_TEMP/assets" 2>/dev/null || true
+          done
+          # Dify asset
+          gh release download "dify-v$version" --repo "${{ github.repository }}" \
+            --pattern "spicrawl-$version.difypkg" --dir "$RUNNER_TEMP/assets" 2>/dev/null || true
+          # OpenCode asset (no file asset, just the npm release)
+          if [ "$(ls -A "$RUNNER_TEMP/assets")" ]; then
+            gh release create "$tag" "$RUNNER_TEMP/assets"/* \
+              --target "$GITHUB_SHA" --title "$tag" \
+              --notes "Spicrawl plugins release $version."
+          else
+            echo "No assets found to attach to unified release $tag"
+          fi
