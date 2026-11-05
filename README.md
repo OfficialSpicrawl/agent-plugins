@@ -550,7 +550,9 @@ The Dify plugin (`dify/`) is released by `.github/workflows/release-dify.yml`.
 1. Bump `version` in `dify/manifest.yaml` (the `meta.version` field is the manifest format version; leave it).
 2. Merge to `main`, then push the tag `dify-vX.Y.Z` on the merged commit. The tag must match the manifest. The workflow packages `spicrawl-X.Y.Z.difypkg` with the Dify plugin CLI (pinned to one release and checked against its SHA-256) and attaches it to a GitHub release of that tag.
 
-Every plugin format now has a release workflow that builds a ZIP and attaches it to a GitHub release. Push the tag shown in the workflow to trigger it.
+Plugin releases happen automatically when a version-bumping PR is merged to `main`. The `.github/workflows/release-all-on-merge.yml` workflow reads each manifest version, skips any plugin that is already released, and builds/uploads the rest.
+
+You can still trigger releases manually with tags:
 
 | Plugin / tool | Workflow | Trigger tag | Artifact |
 |---|---|---|---|
@@ -564,6 +566,6 @@ Every plugin format now has a release workflow that builds a ZIP and attaches it
 | OpenBot | `.github/workflows/release-openbot.yml` | `openbot-v*` | `spicrawl-openbot-<version>.zip` |
 | All of the above (one release page) | `.github/workflows/release-all.yml` | `v*` | all of the above |
 
-The OpenAI workflow requires the `OPENAI_APP_ID` repository secret, which CI injects into `.app.json` before packaging. Until that secret is set, the workflow fails. The registered app ID comes from the OpenAI portal when the Spicrawl app is registered.
+The OpenAI workflow requires the `OPENAI_APP_ID` repository secret, which CI injects into `.app.json` before packaging. The registered app ID comes from the OpenAI portal when the Spicrawl app is registered.
 
 The `validate` workflow runs on every push and pull request. It parses all JSON files, runs the OpenCode tests, runs the Dify plugin's pytest, and fails if any file contains something matching `spicrawl_(live|test)_[a-z0-9]{20,}`.
