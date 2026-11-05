@@ -154,6 +154,27 @@ Only to Spicrawl, in the `Authorization` header of requests to `mcp.spicrawl.com
 - Source and other tools (Claude Code, Codex, Gemini CLI and more):
   <https://github.com/OfficialSpicrawl/agent-plugins>
 
+## Releases
+
+This folder is shared by several agent tools. Each tool has its own release ZIP on the [GitHub releases page](https://github.com/OfficialSpicrawl/agent-plugins/releases):
+
+| Tool | Release ZIP | Install |
+|---|---|---|
+| Claude Code | `spicrawl-claude-<version>.zip` | Install from the Claude plugin marketplace, or unzip into `~/.claude/plugins/local/spicrawl` |
+| Cursor | `spicrawl-cursor-<version>.zip` | Unzip into `~/.cursor/plugins/local/spicrawl`, or install from Cursor Settings → Plugins |
+| Factory Droid | `spicrawl-factory-<version>.zip` | Install via `droid plugin install spicrawl@spicrawl-plugins` |
+| Devin | `spicrawl-devin-<version>.zip` | Install via Devin Plugins → Add plugin → From repository / Upload ZIP |
+| GitHub Copilot CLI | `spicrawl-copilot-<version>.zip` | The ZIP contains the skill; add the MCP server manually with `copilot mcp add` |
+
+### Recent versions
+
+| Version | What changed |
+|---|---|
+| 0.2.3 | Added release ZIPs for every supported agent tool; plugin behavior unchanged. |
+| 0.2.2 | Added plugin README, LICENSE, and Cursor marketplace category/tags. |
+| 0.2.1 | Aligned the skill with the public rendering tiers. |
+| 0.2.0 | Added Dify and n8n integrations to the Spicrawl ecosystem. |
+
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE).
